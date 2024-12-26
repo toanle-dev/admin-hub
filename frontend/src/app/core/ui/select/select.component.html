@@ -1,0 +1,19 @@
+<label class="form-control w-full">
+  @if (label()) {
+  <div class="label">
+    <span class="label-text">{{ label() }}</span>
+  </div>
+  }
+
+  <select
+    class="select select-bordered"
+    [(ngModel)]="value"
+    (change)="onChangeHandler($event)"
+  >
+    @for (option of options(); track $index) {
+    <option [value]="option.value">
+      {{ option.label }}
+    </option>
+    }
+  </select>
+</label>

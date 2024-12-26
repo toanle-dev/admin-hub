@@ -1,0 +1,21 @@
+<div class="flex items-center justify-center h-screen bg-base-content">
+  <div
+    class="w-full max-w-sm p-8 space-y-4 rounded-lg shadow-lg bg-primary-content"
+  >
+    <h2 class="text-2xl font-bold text-center">Login</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <app-input formControlName="email" label="Email"></app-input>
+      <app-input formControlName="password" label="Senha"></app-input>
+
+      <div class="form-control mt-4">
+        <app-button class="w-full">Entrar</app-button>
+      </div>
+    </form>
+
+    <!-- Link para recuperação de senha -->
+    <div class="text-center mt-4">
+      <app-button theme="link">Esqueceu a senha?</app-button>
+    </div>
+  </div>
+</div>

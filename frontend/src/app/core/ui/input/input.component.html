@@ -1,0 +1,25 @@
+<label class="form-control w-full">
+  @if (label()) {
+  <div class="label">
+    <span class="label-text">{{ label() }}</span>
+  </div>
+  } @if (currency()) {
+
+  <input
+    class="input input-bordered w-full"
+    currencyMask
+    [ngModel]="value"
+    (ngModelChange)="onInput($event)"
+    [options]="{ prefix: 'R$ ', thousands: ',', decimal: '.' }"
+    (blur)="onTouched()"
+  />
+  } @else {
+  <input
+    class="input input-bordered w-full"
+    [attr.type]="type()"
+    [(ngModel)]="value"
+    (input)="onInput($event)"
+    (blur)="onTouched()"
+  />
+  }
+</label>

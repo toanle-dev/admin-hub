@@ -1,0 +1,10 @@
+<button
+  [ngClass]="{
+    '!btn-secondary': theme() == 'secondary',
+    '!btn-link': theme() == 'link',
+    '!btn-disabled': disabled()
+  }"
+  [class]="class() + ' btn btn-primary'"
+>
+  <ng-content></ng-content>
+</button>

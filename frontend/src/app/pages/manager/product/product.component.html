@@ -1,0 +1,61 @@
+<div class="p-4 space-y-4">
+  <h1 class="text-2xl font-bold">Gerenciamento de Produtos</h1>
+  <div class="flex space-x-4">
+    <input
+      type="text"
+      placeholder="Filtrar por nome"
+      class="input input-bordered"
+      [(ngModel)]="filters.name"
+    />
+    <input
+      type="number"
+      placeholder="Filtrar por preço máximo"
+      class="input input-bordered"
+      [(ngModel)]="filters.price"
+    />
+    <input
+      type="text"
+      placeholder="Filtrar por categoria"
+      class="input input-bordered"
+      [(ngModel)]="filters.category"
+    />
+  </div>
+  <button class="btn btn-primary" (click)="addProduct()">
+    Adicionar Produto
+  </button>
+  <table class="z-10 table table-zebra w-full mt-4">
+    <thead>
+      <tr>
+        <th class="text-left">Nome</th>
+        <th class="text-left">Descrição</th>
+        <th class="text-right">Preço</th>
+        <th class="text-right">Estoque</th>
+        <th class="text-left">Categoria</th>
+        <th class="text-center">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td class="text-left">{{ product.name }}</td>
+        <td class="text-left">{{ product.description }}</td>
+        <td class="text-right">{{ product.price | currency }}</td>
+        <td class="text-right">{{ product.stock }}</td>
+        <td class="text-left">{{ product.category }}</td>
+        <td class="text-center">
+          <button
+            class="btn btn-sm btn-warning"
+            (click)="editProduct(product.id)"
+          >
+            Editar
+          </button>
+          <button
+            class="btn btn-sm btn-error"
+            (click)="deleteProduct(product.id)"
+          >
+            Excluir
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

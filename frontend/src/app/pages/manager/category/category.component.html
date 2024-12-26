@@ -1,0 +1,43 @@
+<div class="p-4 space-y-4">
+  <h1 class="text-2xl font-bold">Gerenciamento de Produtos</h1>
+  <div class="flex space-x-4">
+    <input
+      type="text"
+      placeholder="Filtrar por nome"
+      class="input input-bordered"
+      [(ngModel)]="filters.name"
+    />
+  </div>
+  <button class="btn btn-primary" (click)="addCategory()">
+    Adicionar Categoria
+  </button>
+  <table class="z-10 table table-zebra w-full mt-4">
+    <thead>
+      <tr>
+        <th class="text-left">Nome</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (category of categories; track $index) {
+      <tr>
+        <td class="text-left">{{ category.name }}</td>
+
+        <td class="text-center">
+          <button
+            class="btn btn-sm btn-warning"
+            (click)="editCategory(category.id)"
+          >
+            Editar
+          </button>
+          <button
+            class="btn btn-sm btn-error"
+            (click)="deleteCategory(category.id)"
+          >
+            Excluir
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

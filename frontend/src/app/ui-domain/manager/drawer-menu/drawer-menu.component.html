@@ -1,0 +1,47 @@
+<div class="drawer z-50">
+  <input #input id="my-drawer" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-side">
+    <label
+      for="my-drawer"
+      aria-label="close sidebar"
+      class="drawer-overlay"
+    ></label>
+    <ul class="menu bg-base-200 rounded-box min-h-full w-80 p-4">
+      <li>
+        <details open>
+          <summary>Administrativo</summary>
+          <ul>
+            <li><a (click)="gotToRoute('/login')">Login</a></li>
+            <li>
+              <a (click)="gotToRoute('/user-management')">Lista de Usuarios</a>
+            </li>
+            <li>
+              <a (click)="gotToRoute('/product-management')"
+                >Lista de Produtos</a
+              >
+            </li>
+            <li>
+              <a (click)="gotToRoute('/product-add')">Cadastro de Produto</a>
+            </li>
+            <li>
+              <a (click)="gotToRoute('/category-management')"
+                >Lista de Categorias</a
+              >
+            </li>
+            <li>
+              <a (click)="gotToRoute('/category-add')">Cadastro de Categoria</a>
+            </li>
+          </ul>
+        </details>
+      </li>
+      <li>
+        <details open>
+          <summary>E-Commerce</summary>
+          <ul>
+            <li><a (click)="gotToRoute('/login')">Todo</a></li>
+          </ul>
+        </details>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="p-4 bg-base-100 shadow rounded-lg space-y-4">
+  <h2 class="text-lg font-bold">Adicionar Categoria</h2>
+  <form
+    [formGroup]="categoryForm"
+    (ngSubmit)="submitForm()"
+    class="space-y-3 w-full"
+  >
+    <app-input formControlName="name" label="Nome da Categoria"></app-input>
+
+    <div class="form-control mt-4">
+      <app-button class="w-full">Confirmar</app-button>
+    </div>
+  </form>
+</div>

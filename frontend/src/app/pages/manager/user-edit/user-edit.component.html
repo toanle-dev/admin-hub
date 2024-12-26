@@ -1,0 +1,20 @@
+<div class="p-6 max-w-4xl mx-auto">
+  <h2 class="text-2xl font-bold mb-4">Editar Usuário</h2>
+
+  <!-- Formulário -->
+  <form [formGroup]="userForm" (ngSubmit)="saveUser()" class="space-y-6">
+    <app-input formControlName="firstName" label="Nome"></app-input>
+
+    <app-input formControlName="lastName" label="Sobrenome"></app-input>
+    <app-input formControlName="email" label="E-mail"></app-input>
+    <app-input formControlName="role" label="Role"></app-input>
+
+    <!-- Botões -->
+    <div class="flex justify-end space-x-4">
+      <button type="button" (click)="cancel()" class="btn btn-secondary">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+  </form>
+</div>

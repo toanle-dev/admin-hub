@@ -1,0 +1,37 @@
+<div class="p-4 bg-base-100 shadow rounded-lg space-y-4">
+  <h2 class="text-lg font-bold">Adicionar Produto</h2>
+  <form
+    [formGroup]="productForm"
+    (ngSubmit)="submitForm()"
+    class="space-y-3 w-full"
+  >
+    <app-input formControlName="name" label="Nome do Produto"></app-input>
+
+    <app-textarea
+      formControlName="description"
+      label="Descrição"
+    ></app-textarea>
+
+    <app-input
+      formControlName="price"
+      [currency]="true"
+      label="Preço"
+    ></app-input>
+
+    <app-input
+      formControlName="stock"
+      type="number"
+      label="Estoque"
+    ></app-input>
+
+    <app-select
+      formControlName="category"
+      label="Categoria"
+      [options]="categories()"
+    ></app-select>
+
+    <div class="form-control mt-4">
+      <app-button class="w-full">Confirmar</app-button>
+    </div>
+  </form>
+</div>
