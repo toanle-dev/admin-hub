@@ -1,0 +1,38 @@
+<form [formGroup]="deliveryAddressForm" (ngSubmit)="onSubmit()">
+  <div class="grid gap-4">
+    <app-input
+      label="CEP"
+      type="number"
+      formControlName="postalCode"
+    ></app-input>
+
+    <div class="grid grid-cols-3 gap-2">
+      <app-input
+        class="col-span-2"
+        label="Rua"
+        formControlName="street"
+      ></app-input>
+      <app-input label="Número" formControlName="number"></app-input>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2">
+      <app-input
+        class="col-span-2"
+        label="Cidade"
+        formControlName="city"
+      ></app-input>
+      <app-input label="Estado" formControlName="state"></app-input>
+    </div>
+    <app-input label="País" formControlName="country"></app-input>
+
+    <app-textarea
+      label="Complemento"
+      formControlName="complement"
+    ></app-textarea>
+  </div>
+  <div class="mt-4 flex justify-end">
+    <app-button type="submit" [disabled]="deliveryAddressForm.invalid">
+      Salvar Endereço
+    </app-button>
+  </div>
+</form>

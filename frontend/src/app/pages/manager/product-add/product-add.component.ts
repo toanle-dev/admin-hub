@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, inject, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormsModule,
@@ -14,6 +20,7 @@ import { InputComponent } from '../../../core/ui/input/input.component';
 import { CreateProduct } from '../../../api/products/interfaces/create-product.interface';
 import { ProductFacade } from '../../../facade/product/product.facade';
 import { SelectOption } from '../../../core/ui/select/select.interface';
+import { InputFileComponent } from '../../../core/ui/input-file/input-file.component';
 
 @Component({
   selector: 'app-product-add',
@@ -26,6 +33,7 @@ import { SelectOption } from '../../../core/ui/select/select.interface';
     ButtonComponent,
     TextareaComponent,
     SelectComponent,
+    InputFileComponent,
   ],
   templateUrl: './product-add.component.html',
   styleUrl: './product-add.component.scss',
@@ -34,6 +42,7 @@ export class ProductAddComponent implements AfterViewInit {
   private readonly productFacade = inject(ProductFacade);
   private readonly fb = inject(FormBuilder);
 
+  file = viewChild.required(InputFileComponent);
   categories = signal<SelectOption[]>([]);
 
   productForm = this.fb.group({
@@ -49,8 +58,9 @@ export class ProductAddComponent implements AfterViewInit {
   }
 
   submitForm(): void {
-    const product = this.mapCreateProduct(this.productForm.value);
-    this.productFacade.createProduct(product).subscribe({
+    const data = this.mapCreateProduct(this.productForm.value);
+
+    this.productFacade.createProduct(data).subscribe({
       next: (res) => {
         history.back();
       },
@@ -73,7 +83,7 @@ export class ProductAddComponent implements AfterViewInit {
     });
   }
 
-  private mapCreateProduct(data: any): CreateProduct {
+  private mapCreateProduct(data: any): FormData {
     const product: CreateProduct = {
       name: data.name,
       description: data.description,
@@ -83,6 +93,15 @@ export class ProductAddComponent implements AfterViewInit {
       categoryId: Number(data.category),
     };
 
-    return product;
+    const formData = new FormData();
+    formData.append('name', product.name);
+    formData.append('price', String(product.price));
+    formData.append('description', product.description);
+    formData.append('stock', String(product.stock));
+    formData.append('imageUrl', String(product.imageUrl));
+    formData.append('categoryId', String(product.categoryId));
+    formData.append('image', this.file().selectedFile || '');
+
+    return formData;
   }
 }

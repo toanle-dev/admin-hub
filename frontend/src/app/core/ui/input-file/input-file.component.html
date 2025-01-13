@@ -1,0 +1,12 @@
+<label class="form-control w-full max-w-xs">
+  @if (label()) {
+  <div class="label">
+    <span class="label-text">{{ label() }}</span>
+  </div>
+  }
+  <input
+    type="file"
+    class="file-input file-input-bordered w-full max-w-xs"
+    (change)="onFileSelected($event)"
+  />
+</label>

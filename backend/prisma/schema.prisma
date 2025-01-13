@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  firstName String    @default("")
+  lastName  String    @default("")
+  role      Role      @relation(fields: [roleId], references: [id])
+  roleId    Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  logs      Log[]     // Registro de atividades no sistema
+  orders    Order[]   // Pedidos feitos pelo usuário (clientes)
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  permissions Permission[] @relation("RolePermissions")
+  users       User[]
+}
+
+model Permission {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  roles Role[] @relation("RolePermissions")
+}
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  categoryId  Int?       
+  name        String
+  description String?
+  price       Float
+  stock       Int       @default(0)
+  imageUrl    String?  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  category    Category?  @relation(fields: [categoryId], references: [id])
+  orders      OrderItem[]
+}
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  products  Product[]
+}
+
+model Order {
+  id          Int        @id @default(autoincrement())
+  user        User       @relation(fields: [userId], references: [id])
+  userId      Int
+  totalAmount Float    
+  
+  statusId    Int
+  status      OrderStatus  @relation(fields: [statusId], references: [id])
+
+  deliveryAddressId Int?
+  deliveryAddress DeliveryAddress? @relation(fields: [deliveryAddressId], references: [id])
+
+  items       OrderItem[]
+  payments     Payment[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   Int
+  quantity  Int      // Quantidade do produto no pedido
+  price     Float    // Preço unitário no momento do pedido
+  
+}
+
+model OrderStatus {
+  id   Int    @id @default(autoincrement())
+  name String @unique // Ex.: "PENDING", "CONFIRMED", "DELIVERED"
+  orders Order[]
+}
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  amountPaid    Float    // Valor efetivamente pago
+  transactionId String?  // ID de transação (se aplicável)
+  order         Order    @relation(fields: [orderId], references: [id])
+  orderId       Int
+  statusPayment PaymentStatus @relation(fields: [statusId], references: [id])
+
+  methodId     Int
+  method       PaymentMethod @relation(fields: [methodId], references: [id])
+
+  // "PENDING", "COMPLETED", "FAILED", "REFUNDED".
+  statusId      Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model PaymentMethod {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  payments Payment[]
+}
+
+model PaymentStatus {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  payments Payment[]
+}
+
+model DeliveryAddress {
+  id           Int      @id @default(autoincrement())
+  street       String
+  number       String
+  complement   String?
+  city         String
+  state        String
+  postalCode   String
+  country      String
+  orders       Order[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// model Report {
+//   id        Int       @id @default(autoincrement())
+//   title     String
+//   data      Json      // Dados do relatório
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime  @updatedAt
+//   user      User      @relation(fields: [userId], references: [id])
+//   userId    Int
+// }
+
+model Log {
+  id        Int       @id @default(autoincrement())
+  // Ex: "Login", "Criou Relatório", "Fez Pedido"
+  action    String    
+  timestamp DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+}

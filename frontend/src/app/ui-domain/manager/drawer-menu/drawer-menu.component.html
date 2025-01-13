@@ -1,11 +1,7 @@
 <div class="drawer z-50">
-  <input #input id="my-drawer" type="checkbox" class="drawer-toggle" />
+  <input #input [id]="id" type="checkbox" class="drawer-toggle" />
   <div class="drawer-side">
-    <label
-      for="my-drawer"
-      aria-label="close sidebar"
-      class="drawer-overlay"
-    ></label>
+    <label [for]="id" aria-label="close sidebar" class="drawer-overlay"></label>
     <ul class="menu bg-base-200 rounded-box min-h-full w-80 p-4">
       <li>
         <details open>
@@ -38,7 +34,7 @@
         <details open>
           <summary>E-Commerce</summary>
           <ul>
-            <li><a (click)="gotToRoute('/login')">Todo</a></li>
+            <li><a (click)="gotToRoute('/home')">Home</a></li>
           </ul>
         </details>
       </li>

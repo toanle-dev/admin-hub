@@ -31,8 +31,8 @@ export class ProductFacade {
       .pipe(map((res) => mapProductById(res)));
   }
 
-  createProduct(product: CreateProduct): Observable<any> {
-    return this.products.createProduct(product);
+  createProduct(data: FormData): Observable<any> {
+    return this.products.createProduct(data);
   }
 
   deleteProduct(id: number): Observable<any> {
@@ -41,6 +41,10 @@ export class ProductFacade {
 
   updateProduct(id: number, product: UpdateProduct): Observable<any> {
     return this.products.updateProduct(id, product);
+  }
+
+  downloadProductImage(productId: number): Observable<Blob> {
+    return this.products.downloadImage(productId);
   }
 
   listCategories(): Observable<Category[]> {

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ApiBase } from '../api.base';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { CreateProduct } from './interfaces/create-product.interface';
 import { Observable } from 'rxjs';
 import { UpdateProduct } from './interfaces/update-product.interface';
 
@@ -16,8 +15,8 @@ export class ProductsService extends ApiBase {
     });
   }
 
-  createProduct(product: CreateProduct): Observable<any> {
-    return this.post('', product);
+  createProduct(data: FormData): Observable<any> {
+    return this.post('', data);
   }
 
   listProducts(): Observable<any> {
@@ -34,5 +33,11 @@ export class ProductsService extends ApiBase {
 
   deleteProduct(productId: number): Observable<any> {
     return this.delete(String(productId));
+  }
+
+  downloadImage(productId: number): Observable<Blob> {
+    return this.fetch('download/' + productId, {
+      responseType: 'blob',
+    });
   }
 }

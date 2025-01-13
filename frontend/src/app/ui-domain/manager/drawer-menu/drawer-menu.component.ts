@@ -1,12 +1,6 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  viewChild,
-  ViewChildren,
-  viewChildren,
-} from '@angular/core';
+import { Component, ElementRef, inject, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-drawer-menu',
@@ -17,6 +11,8 @@ import { Router } from '@angular/router';
 })
 export class DrawerMenuComponent {
   private readonly router = inject(Router);
+
+  readonly id = uuidv4();
   input = viewChild.required<ElementRef<HTMLInputElement>>('input');
 
   toggle() {

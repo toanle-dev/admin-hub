@@ -7,6 +7,7 @@ import {
   input,
   OnChanges,
   OnInit,
+  output,
   SimpleChanges,
 } from '@angular/core';
 import {
@@ -33,7 +34,7 @@ import { SelectOption } from './select.interface';
 export class SelectComponent implements ControlValueAccessor, AfterViewInit {
   label = input('');
   options = input<SelectOption[]>([]);
-
+  change = output<any>();
   value: string = '';
 
   private onChange: (value: string) => void = () => {};
@@ -60,7 +61,8 @@ export class SelectComponent implements ControlValueAccessor, AfterViewInit {
   onChangeHandler(event: Event): void {
     const newValue = (event.target as HTMLSelectElement).value;
     this.value = newValue;
-    this.onChange(newValue);
+    this.change.emit(this.value);
+    this.onChange(this.value);
     this.onTouched();
   }
 }

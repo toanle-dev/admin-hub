@@ -1,0 +1,33 @@
+<div
+  class="grid grid-cols-3 min-h-12 items-center space-x-2 border border-neutral-600 rounded-xl"
+>
+  <!-- Botão de Decremento -->
+  <button
+    type="button"
+    class="col-span-1 min-h-12 text-2xl rounded-tl-xl rounded-bl-xl bg-base-200 hover:bg-base-100"
+    (click)="decrementValue()"
+    aria-label="Decrementar"
+  >
+    -
+  </button>
+
+  <!-- Campo de Valor -->
+  <input
+    class="min-h-12 col-span-1 text-center bg-base-200"
+    [(ngModel)]="value"
+    type="number"
+    value="1"
+    min="1"
+    readonly
+  />
+
+  <!-- Botão de Incremento -->
+  <button
+    type="button"
+    class="col-span-1 min-h-12 text-2xl rounded-tr-xl rounded-br-xl bg-base-200 hover:bg-base-100"
+    (click)="incrementValue()"
+    aria-label="Incrementar"
+  >
+    +
+  </button>
+</div>

@@ -1,0 +1,24 @@
+<section class="grid grid-cols-5 gap-3">
+  <figure class="w-full h-full">
+    <img
+      class="col-span-1 w-full h-full object-cover"
+      [src]="item().product.id | imageDownloader | async"
+    />
+  </figure>
+
+  <div class="relative grid grid-cols-5 col-span-4">
+    <div class="col-span-3">
+      <p class="text-lg">
+        {{ this.item().price * this.item().quantity | currency : "BRL" }}
+      </p>
+      <p>{{ item().product.name }}</p>
+
+      <p>{{ item().quantity }}x {{ item().price }}</p>
+    </div>
+    <app-counter
+      [value]="item().quantity"
+      (change)="changeQuantity($event)"
+      class="col-span-2"
+    ></app-counter>
+  </div>
+</section>

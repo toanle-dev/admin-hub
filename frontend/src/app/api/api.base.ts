@@ -9,10 +9,15 @@ export class ApiBase {
     private readonly config: ApiConfig
   ) {}
 
-  protected fetch<T = any>(url: string): Observable<T> {
-    return this.http.get<T>(this.bindUrlHost(url), {
-      context: new HttpContext().set(API_CONFIG_CONTEXT, this.config),
-    });
+  protected fetch<T = any>(url: string, options?: Object): Observable<T> {
+    const opt = Object.assign(
+      {
+        context: new HttpContext().set(API_CONFIG_CONTEXT, this.config),
+      },
+      options || {}
+    );
+
+    return this.http.get<T>(this.bindUrlHost(url), opt);
   }
 
   protected post<T = any>(url: string, body: any): Observable<T> {

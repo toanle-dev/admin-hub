@@ -14,6 +14,7 @@ import { CreateProduct } from '../../../api/products/interfaces/create-product.i
 import { SelectOption } from '../../../core/ui/select/select.interface';
 import { ProductFacade } from '../../../facade/product/product.facade';
 import { Product } from '../../../facade/product/interfaces/product.interface';
+import { ImageDownloaderPipe } from '../../../core/pipes/image-downloader.pipe';
 
 @Component({
   selector: 'app-product-edit',
@@ -26,6 +27,7 @@ import { Product } from '../../../facade/product/interfaces/product.interface';
     ButtonComponent,
     TextareaComponent,
     SelectComponent,
+    ImageDownloaderPipe,
   ],
   templateUrl: './product-edit.component.html',
   styleUrl: './product-edit.component.scss',
@@ -35,7 +37,6 @@ export class ProductEditComponent {
   private readonly fb = inject(FormBuilder);
 
   id = input.required<number>();
-
   categories = signal<SelectOption[]>([]);
 
   productForm = this.fb.group({

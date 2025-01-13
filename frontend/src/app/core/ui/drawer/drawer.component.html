@@ -1,0 +1,20 @@
+<div class="drawer drawer-end z-50">
+  <input #input [id]="id" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-side">
+    <label [for]="id" aria-label="close sidebar" class="drawer-overlay"></label>
+
+    <section
+      class="menu bg-base-200 rounded-box flex flex-col w-96 h-screen p-0"
+    >
+      <!-- Título fixo no topo -->
+      @if (title()) {
+      <header class="text-white text-lg font-bold p-4 shadow">
+        {{ title() }}
+      </header>
+      }
+
+      <!-- Conteúdo rolável -->
+      <ng-content #container> </ng-content>
+    </section>
+  </div>
+</div>
