@@ -1,55 +1,150 @@
 import { Injectable } from '@nestjs/common';
 
-import { OrderItemInput } from './dto/order-item.input';
 import { PrismaProvider } from 'src/common/providers/prisma/prisma.provider';
+import { CreateDeliveryAddressDto } from './dto/create-delivery-address.dto';
+import { Order, Product } from '@prisma/client';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { map, Observable, Subject } from 'rxjs';
+import { PaymentMethod } from './enum/payment.enum';
+import { OrderStatus } from './enum/order.enum';
 
 @Injectable()
 export class OrdersService {
+  private ordersChange = new Subject();
+
   constructor(private prisma: PrismaProvider) {}
 
   // Criação do pedido
-  async createOrder(userId: number, orderItems: OrderItemInput[]) {
-    let totalAmount = 0;
-    const items = [];
+  async createOrder(userId: number, orderDto: CreateOrderDto): Promise<any> {
+    return this.prisma.$transaction(async (prisma) => {
+      const orderItems = orderDto.items;
+      const deliveryAddressDto = orderDto.deliveryAddress;
+      const paymentId = orderDto.paymentId;
 
-    // Verificação de estoque e cálculo do total
-    for (const item of orderItems) {
-      const product = await this.prisma.product.findUnique({
-        where: { id: item.productId },
-      });
+      let totalAmount = 0;
+      const items = [];
 
-      if (!product || product.stock < item.quantity) {
-        throw new Error('Produto fora de estoque');
+      // Verificar estoque e calcular o total
+      for (const item of orderItems) {
+        const product = await prisma.product.findUnique({
+          where: { id: item.productId },
+        });
+
+        if (!product || product.stock < item.quantity) {
+          throw new Error('Produto fora de estoque');
+        }
+
+        // Atualizar o estoque do produto
+        await prisma.product.update({
+          where: { id: product.id },
+          data: { stock: product.stock - item.quantity },
+        });
+
+        totalAmount += product.price * item.quantity;
+
+        items.push({
+          productId: item.productId,
+          quantity: item.quantity,
+          price: product.price,
+        });
       }
 
-      // Reduzir o estoque
-      await this.prisma.product.update({
-        where: { id: product.id },
-        data: { stock: product.stock - item.quantity },
+      // Criar endereço de entrega
+      const deliveryAddress = await prisma.deliveryAddress.create({
+        data: {
+          street: deliveryAddressDto.street,
+          number: deliveryAddressDto.number,
+          city: deliveryAddressDto.city,
+          state: deliveryAddressDto.state,
+          postalCode: deliveryAddressDto.postalCode,
+          country: deliveryAddressDto.country,
+          complement: deliveryAddressDto.complement || null,
+        },
       });
 
-      totalAmount += product.price * item.quantity;
-
-      items.push({
-        productId: item.productId,
-        quantity: item.quantity,
-        price: product.price,
+      // Criar o pedido no banco de dados
+      const order: Order = await prisma.order.create({
+        data: {
+          userId: userId,
+          totalAmount: totalAmount,
+          deliveryAddressId: deliveryAddress.id,
+          phoneContact: orderDto.phoneContact,
+          statusId: OrderStatus.PENDING,
+          items: {
+            create: items,
+          },
+        },
+        include: {
+          items: true,
+          status: true,
+          deliveryAddress: true,
+        },
       });
-    }
 
-    // Criar pedido no banco de dados
-    const order = await this.prisma.order.create({
-      data: {
-        user: { connect: { id: userId } },
-        totalAmount,
+      // Criar o registro de pagamento
+      const payment = await prisma.payment.create({
+        data: {
+          amountPaid: totalAmount,
+          method: { connect: { id: paymentId } },
+          statusPayment: { connect: { id: PaymentMethod.PENDING } },
+          order: { connect: { id: order.id } },
+        },
+      });
 
-        status: { connect: { id: 1 } }, // Status "PENDING"
-        items: { create: items },
-      },
-      include: { items: true },
+      // Notifica atualização das rotas
+      const orders = await this.getOrders();
+      this.ordersChange.next(orders);
+
+      return {
+        order,
+        payment,
+      };
     });
+  }
 
-    return order;
+  async getOrdersByContact(phone: string) {
+    return this.prisma.order.findMany({
+      where: {
+        phoneContact: phone,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        items: {
+          include: {
+            product: true,
+          },
+        },
+        status: true,
+        deliveryAddress: true,
+        payments: {
+          include: {
+            method: true,
+            statusPayment: true,
+          },
+        },
+      },
+    });
+  }
+  async getOrders() {
+    return this.prisma.order.findMany({
+      include: {
+        items: {
+          include: {
+            product: true,
+          },
+        },
+        status: true,
+        deliveryAddress: true,
+        payments: {
+          include: {
+            method: true,
+            statusPayment: true,
+          },
+        },
+      },
+    });
   }
 
   // Buscar pedidos por usuário
@@ -67,10 +162,24 @@ export class OrdersService {
       data: { statusId },
       include: { status: true },
     });
+
+    const orders = await this.getOrders();
+    this.ordersChange.next(orders);
     return order;
   }
 
   async getPayments() {
     return this.prisma.paymentMethod.findMany();
+  }
+
+  getOrdersEvent(): Observable<MessageEvent> {
+    return this.ordersChange.asObservable().pipe(
+      map(
+        (orders) =>
+          ({
+            data: orders,
+          }) as MessageEvent,
+      ),
+    );
   }
 }

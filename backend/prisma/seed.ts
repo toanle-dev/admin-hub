@@ -14,20 +14,22 @@ main()
 
 async function main() {
   // Order Status
-  ['PENDING', 'CONFIRMED', 'DELIVERED'].forEach(async (status, index) => {
-    await prisma.orderStatus.upsert({
-      where: {
-        id: index + 1,
-      },
-      update: {
-        name: status,
-      },
-      create: {
-        id: index + 1,
-        name: status,
-      },
-    });
-  });
+  ['PENDING', 'CONFIRMED', 'DELIVERED', 'REFUSED'].forEach(
+    async (status, index) => {
+      await prisma.orderStatus.upsert({
+        where: {
+          id: index + 1,
+        },
+        update: {
+          name: status,
+        },
+        create: {
+          id: index + 1,
+          name: status,
+        },
+      });
+    },
+  );
 
   // Payment Status
   ['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED'].forEach(

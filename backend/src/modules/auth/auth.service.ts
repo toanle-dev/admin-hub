@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { PrismaProvider } from 'src/common/providers/prisma/prisma.provider';
 import * as bcrypt from 'bcrypt';
@@ -40,5 +40,13 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
 
     return { access_token: token };
+  }
+
+  verifyToken(token: string): any {
+    try {
+      return this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
   }
 }

@@ -6,48 +6,67 @@ import {
   Param,
   Patch,
   UseGuards,
+  Req,
+  Sse,
+  Query,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 
 import { CreateOrderDto } from './dto/create-order.dto';
-import { OrderItemInput } from './dto/order-item.input';
 import { JwtAuthGuard } from 'src/modules/auth/guard/jwt-auth.guard';
-import { AdminGuard } from 'src/modules/auth/guard/admin.guard';
+import { Observable } from 'rxjs';
+import { AuthService } from 'src/modules/auth/auth.service';
+import { OrderStatus } from './enum/order.enum';
 
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly ordersService: OrdersService,
+  ) {}
 
   // Criar um pedido
   @Post()
   @UseGuards(JwtAuthGuard)
-  async createOrder(
-    @Body() createOrderDto: CreateOrderDto,
-    @Param('userId') userId: number,
-  ) {
-    return this.ordersService.createOrder(userId, createOrderDto.items);
+  async createOrder(@Body() orderDto: CreateOrderDto, @Req() req: any) {
+    return this.ordersService.createOrder(req.user.userId, orderDto);
   }
 
   // Listar pedidos de um usuário
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getOrders(@Param('userId') userId: number) {
-    return this.ordersService.getOrdersByUserId(userId);
+  async getOrders() {
+    return this.ordersService.getOrders();
   }
 
-  // Atualizar status de um pedido
+  @Get('contact/:phone')
+  @UseGuards(JwtAuthGuard)
+  async getOrdersByContact(@Param('phone') phone) {
+    return this.ordersService.getOrdersByContact(phone);
+  }
+
+  // Atualizar status do pedido
   @Patch(':orderId/status')
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  async updateOrderStatus(
+  @UseGuards(JwtAuthGuard)
+  async updateStatus(
     @Param('orderId') orderId: number,
-    @Body() status: { statusId: number },
+    @Body() data: { statusId: OrderStatus },
   ) {
-    return this.ordersService.updateOrderStatus(orderId, status.statusId);
+    return this.ordersService.updateOrderStatus(orderId, data.statusId);
   }
 
   @Get('payments')
   @UseGuards(JwtAuthGuard)
   async getPayments() {
     return this.ordersService.getPayments();
+  }
+
+  @Sse('updates')
+  sse(@Query('token') token): Observable<MessageEvent> {
+    const user = this.authService.verifyToken(token);
+    if (!user) throw new UnauthorizedException();
+
+    return this.ordersService.getOrdersEvent();
   }
 }
