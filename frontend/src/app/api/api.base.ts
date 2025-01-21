@@ -32,14 +32,14 @@ export class ApiBase {
     });
   }
 
-  protected update<T = any>(url: string, body: any): Observable<T> {
-    return this.http.put<T>(this.bindUrlHost(url), body, {
+  protected update<T = any>(url: string, body?: any): Observable<T> {
+    return this.http.put<T>(this.bindUrlHost(url), body || {}, {
       context: new HttpContext().set(API_CONFIG_CONTEXT, this.config),
     });
   }
 
-  protected partialUpdate<T = any>(url: string, body: any): Observable<T> {
-    return this.http.patch<T>(this.bindUrlHost(url), body, {
+  protected partialUpdate<T = any>(url: string, body?: any): Observable<T> {
+    return this.http.patch<T>(this.bindUrlHost(url), body || {}, {
       context: new HttpContext().set(API_CONFIG_CONTEXT, this.config),
     });
   }

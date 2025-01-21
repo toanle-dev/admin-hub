@@ -3,6 +3,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { ManagerContainerComponent } from './pages/manager/manager-container/manager-container.component';
 import { authGuard } from './core/guards/auth/auth.guard';
 import { EcommerceContainerComponent } from './pages/ecommerce/ecommerce-container/ecommerce-container.component';
+import { CheckoutContainerComponent } from './pages/checkout/checkout-container/checkout-container.component';
+import { CheckoutComponent } from './pages/checkout/checkout/checkout.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +26,16 @@ export const routes: Routes = [
           import('./pages/ecommerce/home/home.component').then(
             (m) => m.HomeComponent
           ),
+      },
+    ],
+  },
+  {
+    path: '',
+    component: CheckoutContainerComponent,
+    children: [
+      {
+        path: 'checkout',
+        component: CheckoutComponent,
       },
     ],
   },

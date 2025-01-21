@@ -4,4 +4,5 @@ export interface Payment {
   id: number;
   name: string;
   description: PaymentMethod;
+  value: number;
 }

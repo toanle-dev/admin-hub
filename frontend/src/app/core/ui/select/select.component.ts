@@ -34,7 +34,7 @@ import { SelectOption } from './select.interface';
 export class SelectComponent implements ControlValueAccessor, AfterViewInit {
   label = input('');
   options = input<SelectOption[]>([]);
-  change = output<any>();
+  select = output<any>();
   value: string = '';
 
   private onChange: (value: string) => void = () => {};
@@ -47,7 +47,9 @@ export class SelectComponent implements ControlValueAccessor, AfterViewInit {
   }
 
   writeValue(value: string): void {
-    this.value = value;
+    if (value) {
+      this.value = value;
+    }
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -61,7 +63,7 @@ export class SelectComponent implements ControlValueAccessor, AfterViewInit {
   onChangeHandler(event: Event): void {
     const newValue = (event.target as HTMLSelectElement).value;
     this.value = newValue;
-    this.change.emit(this.value);
+    this.select.emit(this.value);
     this.onChange(this.value);
     this.onTouched();
   }

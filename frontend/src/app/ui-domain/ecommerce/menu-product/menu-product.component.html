@@ -1,23 +1,36 @@
-<div class="card bg-base-100 shadow-xl">
-  <figure class="max-w-xs max-h-52">
-    <img [src]="product().id | imageDownloader | async" alt="Product 1" />
-  </figure>
+<div class="bg-base-100 shadow-xl !h-56 !w-56 relative pt-4">
+  <img
+    class="object-cover size-full"
+    [src]="product().id | imageDownloader | async"
+    alt="Product 1"
+  />
 
-  <div class="card-body">
-    <h2 class="card-title">{{ product().name }}</h2>
-    <p>{{ product().price | currency : "BRL" }}</p>
-    <div class="card-actions justify-end">
-      <button (click)="addProduct()" class="btn btn-circle">
+  <section class="absolute bg-detail h-20 w-full top-0 left-0 px-4 pt-2">
+    <h2 class="">{{ product().name }}</h2>
+    <p class="font-semibold text-xl">
+      {{ product().price | currency : "BRL" }}
+    </p>
+  </section>
+
+  <section class="absolute right-3 bottom-3 active:animate-wiggle-more">
+    <app-button (click)="addProduct()" [circle]="true" theme="primary">
+      <div class="indicator">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          height="24px"
-          viewBox="0 -960 960 960"
-          width="24px"
-          fill="#e8eaed"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-          <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+          />
         </svg>
-      </button>
-    </div>
-  </div>
+        <span class="badge badge-sm indicator-item">{{ amountInCart() }}</span>
+      </div>
+    </app-button>
+  </section>
 </div>

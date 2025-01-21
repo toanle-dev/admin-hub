@@ -5,11 +5,15 @@ import { StorageKeys } from './storage.enum';
   providedIn: 'root',
 })
 export class StorageService {
-  getItem(key: StorageKeys): string | null {
+  get(key: StorageKeys): string | null {
     return localStorage.getItem(key);
   }
 
-  setItem(key: StorageKeys, value: string) {
+  set(key: StorageKeys, value: string) {
     localStorage.setItem(key, value);
+  }
+
+  remove(key: StorageKeys) {
+    localStorage.removeItem(key);
   }
 }

@@ -21,7 +21,6 @@ export class ModalComponent {
   modal = viewChild.required<ElementRef<any>>('modal');
 
   create<T = any>(instance: Type<T>, callback?: (ref: T) => void) {
-    // Limpa o container antes de criar um novo componente (opcional)
     this.container().clear();
 
     // Cria o componente dinâmico

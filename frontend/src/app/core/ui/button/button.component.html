@@ -1,10 +1,17 @@
 <button
   [ngClass]="{
     '!btn-secondary': theme() == 'secondary',
+    '!btn-primary': theme() == 'primary',
+    '!btn-accent': theme() == 'accent',
+    '!btn-error': theme() == 'error',
+    '!btn-success': theme() == 'success',
+    '!btn-ghost': theme() == 'ghost',
     '!btn-link': theme() == 'link',
-    '!btn-disabled': disabled()
+    '!btn-disabled': disabled(),
+    '!btn-circle': circle(),
+    '!btn-outline': outline(),
   }"
-  [class]="class() + ' btn btn-primary'"
+  [class]="class() + ' btn '"
 >
   <ng-content></ng-content>
 </button>

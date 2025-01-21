@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { ButtonTheme } from './button.interface';
 import { CommonModule } from '@angular/common';
 
@@ -10,7 +10,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
-  theme = input<ButtonTheme>('primary');
+  theme = input<ButtonTheme>('default');
+  outline = input(false);
+  circle = input(false);
   disabled = input(false);
   class = input('');
 }

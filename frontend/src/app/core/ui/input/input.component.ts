@@ -4,6 +4,7 @@ import {
   ElementRef,
   forwardRef,
   input,
+  output,
   viewChild,
 } from '@angular/core';
 import {
@@ -12,11 +13,12 @@ import {
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { NgxCurrencyDirective } from 'ngx-currency';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [CommonModule, NgxCurrencyDirective, FormsModule],
+  imports: [CommonModule, NgxCurrencyDirective, FormsModule, NgxMaskDirective],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
   providers: [
@@ -32,29 +34,32 @@ export class InputComponent implements ControlValueAccessor {
   label = input('');
   type = input('text');
   currency = input(false);
-
+  phone = input(false);
+  changeValue = output<KeyboardEvent>();
   input = viewChild.required<ElementRef>('input');
 
   private onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
 
+  onKeyUp(event: KeyboardEvent) {
+    this.changeValue.emit(event);
+    const target: any = event.target;
+    this.writeValue(target.value);
+  }
+
   onInput(event: Event | number) {
-    // Caso for um input normal
     if (event instanceof Event) {
       const input = event.target as HTMLInputElement;
-      this.value = input.value;
+      this.writeValue(input.value); // Atualiza o valor
     } else {
-      // Caso usar ngx-currency o valor do evento vem numerico
-      this.value = String(event);
+      this.writeValue(String(event)); // Atualiza o valor para ngx-currency
     }
-
-    // Notifica Angular sobre a mudança no valor
-    this.onChange(this.value);
   }
 
   writeValue(value: string): void {
-    if (value) {
+    if (value !== undefined) {
       this.value = value || '';
+      this.onChange(this.value);
     }
   }
 

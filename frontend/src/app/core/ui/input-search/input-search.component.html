@@ -1,8 +1,11 @@
 <div class="form-control">
   <div class="flex">
     <input
-      class="input rounded-full input-bordered"
+      class="input !input-md rounded-full input-bordered"
       placeholder="Buscar Produto"
+      (input)="input.emit($event)"
+      (keydown)="keydown.emit($event)"
+      (keypress)="keypress.emit($event)"
     />
   </div>
 </div>

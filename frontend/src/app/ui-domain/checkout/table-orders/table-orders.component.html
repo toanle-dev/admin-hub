@@ -1,0 +1,41 @@
+<h2 class="text-2xl font-bold mb-4">Pedidos</h2>
+<div class="overflow-x-auto">
+  <table class="table w-full">
+    <!-- Table Header -->
+    <thead>
+      <tr>
+        <th>Enviado</th>
+        <th>Pedido ID</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Example Row -->
+      @for (order of orders(); track $index) {
+      <tr>
+        <td>{{ order.createdAt }}</td>
+        <td>{{ order.id }}</td>
+        <td>
+          <label
+            tabindex="0"
+            class="btn btn-warning btn-sm {{ statusButton(order.status.id) }}"
+          >
+            {{ order.status.name }}
+          </label>
+        </td>
+        <td>{{ order.totalValue | currency : "BRL" }}</td>
+        <td>
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="viewOrderDetails(order.id)"
+          >
+            Detalhe
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

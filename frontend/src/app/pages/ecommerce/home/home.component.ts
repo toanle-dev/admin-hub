@@ -1,41 +1,59 @@
-import {
-  AfterViewInit,
-  Component,
-  inject,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, inject, signal } from '@angular/core';
 
 import { MenuProductComponent } from '../../../ui-domain/ecommerce/menu-product/menu-product.component';
 import { ProductFacade } from '../../../facade/product/product.facade';
-import { Product } from '../../../facade/product/interfaces/product.interface';
-import { PaymentDrawerComponent } from '../../../ui-domain/ecommerce/payment-drawer/payment-drawer.component';
-import { ButtonComponent } from '../../../core/ui/button/button.component';
-import { DrawerComponent } from '../../../core/ui/drawer/drawer.component';
-import { CartDrawerComponent } from '../../../ui-domain/ecommerce/cart-drawer/cart-drawer.component';
+import {
+  GroupedProducts,
+  Product,
+} from '../../../facade/product/interfaces/product.interface';
+
+import { DrawerService } from '../../../core/ui/drawer/drawer.service';
+import { HeaderMenuService } from '../../../ui-domain/ecommerce/header-menu/header-menu.service';
+import { GroupedObservable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    ButtonComponent,
-    MenuProductComponent,
-    PaymentDrawerComponent,
-    ButtonComponent,
-    DrawerComponent,
-    CartDrawerComponent,
-  ],
+  imports: [MenuProductComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements AfterViewInit {
-  private readonly products = inject(ProductFacade);
+  private products = inject(ProductFacade);
+  private headerMenuService = inject(HeaderMenuService);
+  private listProducts: GroupedProducts = {};
 
-  listProducts = signal<Product[]>([]);
+  filteredListProducts = signal<GroupedProducts>({});
+  categories = signal<string[]>([]);
 
   ngAfterViewInit(): void {
-    this.products.listProducts().subscribe((data) => {
-      this.listProducts.set(data);
+    this.products.listGroupedProducts().subscribe((data) => {
+      this.listProducts = data;
+
+      this.categories.set(Object.keys(data));
+
+      this.filteredListProducts.set(data);
     });
+
+    this.headerMenuService.inputFilter.subscribe((value: string) => {
+      if (!value) {
+        this.filteredListProducts.set(this.listProducts);
+      }
+
+      this.filteredListProducts.update((data) => {
+        const groupedProducts = structuredClone(data);
+        Object.keys(groupedProducts).forEach((g) => {
+          groupedProducts[g] = this.listProducts[g].filter((product) => {
+            return product.name.toUpperCase().indexOf(value.toUpperCase()) > -1;
+          });
+        });
+
+        return { ...groupedProducts };
+      });
+    });
+  }
+
+  listByCategory(category: string): Product[] {
+    return this.filteredListProducts()[category];
   }
 }

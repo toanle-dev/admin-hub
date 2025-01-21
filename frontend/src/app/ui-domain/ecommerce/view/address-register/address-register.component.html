@@ -1,0 +1,43 @@
+<header class="text-lg font-bold p-4 shadow">Adicionar Endereço</header>
+<form class="p-4" [formGroup]="deliveryAddressForm" (ngSubmit)="onSubmit()">
+  <div class="grid gap-4">
+    <app-input
+      label="CEP"
+      formControlName="postalCode"
+      (keyup)="onPostalCodeChange($event)"
+    ></app-input>
+
+    <app-input label="Bairro" formControlName="district"></app-input>
+
+    <div class="grid grid-cols-3 gap-2">
+      <app-input
+        class="col-span-2"
+        label="Logradouro"
+        formControlName="street"
+      ></app-input>
+      <app-input label="Número" formControlName="number"></app-input>
+    </div>
+
+    <app-textarea
+      label="Complemento"
+      formControlName="complement"
+    ></app-textarea>
+  </div>
+  <div class="mt-4 flex flex-col gap-2 justify-end">
+    <app-button
+      theme="primary"
+      class="w-full"
+      type="submit"
+      [disabled]="deliveryAddressForm.invalid"
+    >
+      Confirmar
+    </app-button>
+    <app-button
+      theme="primary"
+      [outline]="true"
+      class="w-full"
+      (click)="goBack()"
+      >Voltar</app-button
+    >
+  </div>
+</form>

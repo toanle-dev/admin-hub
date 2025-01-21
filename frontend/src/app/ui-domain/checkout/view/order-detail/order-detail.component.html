@@ -1,0 +1,76 @@
+<div class="grid grid-cols-2">
+  <div>
+    <h2 class="font-bold text-xl mb-4">Detalhes do Pedido #{{ order.id }}</h2>
+    <p>{{ order.createdAt }}</p>
+  </div>
+  <p class="ml-auto">{{ order.status.name }}</p>
+</div>
+<div class="divider"></div>
+<!-- Informações do pedido -->
+<div class="mb-4">
+  <p>
+    <span class="font-bold">Última atualização:</span> {{ order.updatedAt }}
+  </p>
+  <p>
+    <span class="font-bold">Total:</span>
+    {{ order.totalValue | currency : "BRL" }}
+  </p>
+</div>
+<!-- Endereço de entrega -->
+<div class="mb-4">
+  <h3 class="font-semibold text-lg">Endereço de Entrega</h3>
+  <p>
+    {{ order.deliveryAddress!.street + ", " + order.deliveryAddress!.number }}
+  </p>
+  <p>Complemento: {{ order.deliveryAddress!.complement }}</p>
+  <p>CEP: {{ order.deliveryAddress!.postalCode }}</p>
+</div>
+
+<!-- Itens do pedido -->
+<div class="mb-4">
+  <h3 class="font-semibold text-lg">Itens do Pedido</h3>
+  <table class="table w-full">
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Preço</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of order.items; track $index) {
+      <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price | currency : "BRL" }}</td>
+        <td>{{ item.quantity * item.price | currency : "BRL" }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+<!-- Pagamentos -->
+<div class="mb-4">
+  <h3 class="font-semibold text-lg">Pagamentos</h3>
+  <ul class="list-disc ml-5">
+    @for (payment of order.payments; track $index) {
+    <li>
+      <p><span class="font-bold">Método:</span> {{ payment.method.name }}</p>
+      <p>
+        <span class="font-bold">Valor Pago:</span>
+        {{ payment.amountPaid | currency : "BRL" }}
+      </p>
+      <p>
+        <span class="font-bold">Status:</span> {{ payment.statusPayment.name }}
+      </p>
+    </li>
+    }
+  </ul>
+</div>
+<div class="modal-action">
+  <app-button theme="error" (click)="refusedOrder()">Recusar Pedido</app-button>
+  <app-button theme="success" (click)="confirmOrder()"
+    >Aceitar Pedido</app-button
+  >
+</div>

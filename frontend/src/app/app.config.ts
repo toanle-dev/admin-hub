@@ -14,12 +14,14 @@ import {
 import { JwtModule } from '@auth0/angular-jwt';
 import { StorageKeys } from './core/providers/storage/storage.enum';
 import { environment } from '../environments/environment';
+import { provideEnvironmentNgxMask } from 'ngx-mask';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptorsFromDi()),
+    provideEnvironmentNgxMask(),
     importProvidersFrom([
       JwtModule.forRoot({
         config: {

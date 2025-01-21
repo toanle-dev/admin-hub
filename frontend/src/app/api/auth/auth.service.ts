@@ -24,7 +24,7 @@ export class AuthService extends ApiBase {
       password: password,
     }).pipe(
       tap((res: any) => {
-        this.storage.setItem(StorageKeys.token, res.access_token);
+        this.storage.set(StorageKeys.token, res.access_token);
       })
     );
   }

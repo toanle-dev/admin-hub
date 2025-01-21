@@ -1,0 +1,15 @@
+<div class="toast z-[1000]">
+  @for (message of messages; track $index) {
+  <div
+    class="alert"
+    [ngClass]="{
+      '!alert-success': theme() == 'success',
+      '!alert-info': theme() == 'info'
+    }"
+  >
+    <div>
+      <span>{{ message.text }}</span>
+    </div>
+  </div>
+  }
+</div>

@@ -1,3 +1,5 @@
+import { Category } from './category.interface';
+
 export interface Product {
   id: number;
   categoryId: number;
@@ -8,5 +10,9 @@ export interface Product {
   imageUrl: null;
   createdAt: string;
   updatedAt: string;
-  category: any;
+  category: Category;
 }
+
+export type GroupedProducts = {
+  [categoryName: string]: Product[];
+};

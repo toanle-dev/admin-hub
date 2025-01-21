@@ -6,6 +6,7 @@ export const mapPayments = (res: any[]): Payment[] => {
     const data: Payment = {
       id: value.id,
       name: value.name,
+      value: 0,
       description: PaymentMethod[value.name as keyof typeof PaymentMethod],
     };
     return data;

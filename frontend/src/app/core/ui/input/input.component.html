@@ -4,22 +4,32 @@
     <span class="label-text">{{ label() }}</span>
   </div>
   } @if (currency()) {
-
   <input
-    class="input input-bordered w-full"
+    class="input input-bordered w-full !text-left"
     currencyMask
+    [options]="{ prefix: 'R$ ', thousands: ',', decimal: '.' }"
     [ngModel]="value"
     (ngModelChange)="onInput($event)"
-    [options]="{ prefix: 'R$ ', thousands: ',', decimal: '.' }"
     (blur)="onTouched()"
+    (keyup)="onKeyUp($event)"
+  />
+  } @else if(phone()) {
+  <input
+    class="input input-bordered w-full"
+    mask="(00) 0 0000 0000"
+    [ngModel]="value"
+    (ngModelChange)="onInput($event)"
+    (blur)="onTouched()"
+    (keyup)="onKeyUp($event)"
   />
   } @else {
   <input
     class="input input-bordered w-full"
     [attr.type]="type()"
-    [(ngModel)]="value"
-    (input)="onInput($event)"
+    [ngModel]="value"
+    (ngModelChange)="onInput($event)"
     (blur)="onTouched()"
+    (keyup)="onKeyUp($event)"
   />
   }
 </label>

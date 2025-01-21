@@ -2,17 +2,17 @@ import { inject, Injectable } from '@angular/core';
 import { ProductsService } from '../../api/products/products.service';
 import { CategoriesService } from '../../api/categories/categories.service';
 
-import { mapProducts } from './serializers/all-products';
+import { mapProducts } from './serializers/list-products';
 import { map, Observable } from 'rxjs';
-import { Product } from './interfaces/product.interface';
+import { GroupedProducts, Product } from './interfaces/product.interface';
 import { mapCategories } from './serializers/list-categories';
-import { CreateProduct } from '../../api/products/interfaces/create-product.interface';
-import { UpdateProduct } from '../../api/products/interfaces/update-product.interface';
 import { Category } from './interfaces/category.interface';
 import { mapProductById } from './serializers/list-by-id';
 import { CreateCategory } from '../../api/categories/interfaces/create-category.interface';
 import { UpdateCategory } from '../../api/categories/interfaces/update-category.interface';
 import { mapCategoryById } from './serializers/find-category';
+import { UpdateProduct } from '../../api/products/interfaces/update-product.interface';
+import { mapGroupedProducts } from './serializers/list-grouped-products';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +23,12 @@ export class ProductFacade {
 
   listProducts(): Observable<Product[]> {
     return this.products.listProducts().pipe(map((res) => mapProducts(res)));
+  }
+
+  listGroupedProducts(): Observable<GroupedProducts> {
+    return this.products
+      .listProducts()
+      .pipe(map((res) => mapGroupedProducts(res)));
   }
 
   findProduct(productId: number): Observable<Product> {

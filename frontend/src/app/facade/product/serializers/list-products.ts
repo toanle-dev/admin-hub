@@ -1,4 +1,4 @@
-import { Product } from '../interfaces/product.interface';
+import { GroupedProducts, Product } from '../interfaces/product.interface';
 
 export const mapProducts = (res: any[]): Product[] => {
   return res.map((value) => {
