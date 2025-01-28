@@ -6,10 +6,14 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <app-input formControlName="email" label="Email"></app-input>
-      <app-input formControlName="password" label="Senha"></app-input>
+      <app-input
+        type="password"
+        formControlName="password"
+        label="Senha"
+      ></app-input>
 
       <div class="form-control mt-4">
-        <app-button class="w-full">Entrar</app-button>
+        <app-button theme="primary" class="w-full">Entrar</app-button>
       </div>
     </form>
 

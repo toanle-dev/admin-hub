@@ -8,11 +8,18 @@ import {
 import { InputComponent } from '../../../core/ui/input/input.component';
 import { ButtonComponent } from '../../../core/ui/button/button.component';
 import { ProductFacade } from '../../../facade/product/product.facade';
+import { GoBackComponent } from '../../../core/ui/go-back/go-back.component';
 
 @Component({
   selector: 'app-category-edit',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, ButtonComponent, InputComponent],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    ButtonComponent,
+    InputComponent,
+    GoBackComponent,
+  ],
   templateUrl: './category-edit.component.html',
   styleUrl: './category-edit.component.scss',
 })

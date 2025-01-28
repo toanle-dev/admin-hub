@@ -32,6 +32,7 @@ import { NgxMaskDirective } from 'ngx-mask';
 export class InputComponent implements ControlValueAccessor {
   value: string = '';
   label = input('');
+  placeholder = input('');
   type = input('text');
   currency = input(false);
   phone = input(false);
@@ -43,8 +44,6 @@ export class InputComponent implements ControlValueAccessor {
 
   onKeyUp(event: KeyboardEvent) {
     this.changeValue.emit(event);
-    const target: any = event.target;
-    this.writeValue(target.value);
   }
 
   onInput(event: Event | number) {

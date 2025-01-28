@@ -1,5 +1,8 @@
 <div class="p-4 bg-base-100 shadow rounded-lg space-y-4">
-  <h2 class="text-lg font-bold">Adicionar Categoria</h2>
+  <div class="flex">
+    <h2 class="text-lg font-bold">Editar Categoria</h2>
+    <app-go-back class="ml-auto"></app-go-back>
+  </div>
   <form
     [formGroup]="categoryForm"
     (ngSubmit)="submitForm()"
@@ -8,7 +11,7 @@
     <app-input formControlName="name" label="Nome da Categoria"></app-input>
 
     <div class="form-control mt-4">
-      <app-button class="w-full">Confirmar</app-button>
+      <app-button theme="primary" class="w-full">Confirmar</app-button>
     </div>
   </form>
 </div>

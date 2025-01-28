@@ -27,8 +27,8 @@ export class ProductsService extends ApiBase {
     return this.fetch(String(productId));
   }
 
-  updateProduct(productId: number, product: UpdateProduct): Observable<any> {
-    return this.update(String(productId), product);
+  updateProduct(productId: number, data: FormData): Observable<any> {
+    return this.update(String(productId), data);
   }
 
   deleteProduct(productId: number): Observable<any> {

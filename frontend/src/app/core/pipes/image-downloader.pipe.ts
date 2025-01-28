@@ -10,6 +10,9 @@ export class ImageDownloaderPipe implements PipeTransform {
   private product = inject(ProductFacade);
 
   transform(productId: number): Observable<string> {
+    if (!productId) {
+      return of('');
+    }
     return this.product
       .downloadProductImage(Number(productId))
       .pipe(map((imageBlob) => URL.createObjectURL(imageBlob)));

@@ -9,4 +9,9 @@
     class="file-input file-input-bordered w-full max-w-xs"
     (change)="onFileSelected($event)"
   />
+
+  @if (imageUrl) {
+  <img [src]="imageUrl" class="object-cover size-60 max-w-xs mb-4" />
+
+  }
 </label>

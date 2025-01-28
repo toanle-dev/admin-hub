@@ -5,6 +5,7 @@
   </div>
   } @if (currency()) {
   <input
+    [placeholder]="placeholder()"
     class="input input-bordered w-full !text-left"
     currencyMask
     [options]="{ prefix: 'R$ ', thousands: ',', decimal: '.' }"
@@ -15,6 +16,7 @@
   />
   } @else if(phone()) {
   <input
+    [placeholder]="placeholder()"
     class="input input-bordered w-full"
     mask="(00) 0 0000 0000"
     [ngModel]="value"
@@ -24,6 +26,7 @@
   />
   } @else {
   <input
+    [placeholder]="placeholder()"
     class="input input-bordered w-full"
     [attr.type]="type()"
     [ngModel]="value"

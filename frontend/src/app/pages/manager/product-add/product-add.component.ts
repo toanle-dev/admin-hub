@@ -21,6 +21,7 @@ import { CreateProduct } from '../../../api/products/interfaces/create-product.i
 import { ProductFacade } from '../../../facade/product/product.facade';
 import { SelectOption } from '../../../core/ui/select/select.interface';
 import { InputFileComponent } from '../../../core/ui/input-file/input-file.component';
+import { GoBackComponent } from '../../../core/ui/go-back/go-back.component';
 
 @Component({
   selector: 'app-product-add',
@@ -34,6 +35,7 @@ import { InputFileComponent } from '../../../core/ui/input-file/input-file.compo
     TextareaComponent,
     SelectComponent,
     InputFileComponent,
+    GoBackComponent,
   ],
   templateUrl: './product-add.component.html',
   styleUrl: './product-add.component.scss',
@@ -68,6 +70,10 @@ export class ProductAddComponent implements AfterViewInit {
         console.log('Erro ao cadastrar produto', err);
       },
     });
+  }
+
+  goBack() {
+    history.back();
   }
 
   private loadCategories() {

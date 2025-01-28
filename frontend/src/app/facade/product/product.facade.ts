@@ -45,8 +45,8 @@ export class ProductFacade {
     return this.products.deleteProduct(id);
   }
 
-  updateProduct(id: number, product: UpdateProduct): Observable<any> {
-    return this.products.updateProduct(id, product);
+  updateProduct(id: number, data: FormData): Observable<any> {
+    return this.products.updateProduct(id, data);
   }
 
   downloadProductImage(productId: number): Observable<Blob> {
