@@ -1,6 +1,6 @@
 # Tarefas de Desenvolvimento Frontend
 
-## **Dashboard **Administrativo\*\*\*\*
+## **Dashboard Administrativo**
 
 ### 1. **Tela de Login**
 

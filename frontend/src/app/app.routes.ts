@@ -5,6 +5,7 @@ import { authGuard } from './core/guards/auth/auth.guard';
 import { EcommerceContainerComponent } from './pages/ecommerce/ecommerce-container/ecommerce-container.component';
 import { CheckoutContainerComponent } from './pages/checkout/checkout-container/checkout-container.component';
 import { CheckoutComponent } from './pages/checkout/checkout/checkout.component';
+import { LoginEcommerceComponent } from './pages/login-ecommerce/login-ecommerce.component';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,10 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'login-ecommerce',
+    component: LoginEcommerceComponent,
   },
   {
     path: '',

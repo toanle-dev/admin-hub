@@ -1,0 +1,78 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="card w-96 bg-white shadow-xl">
+    <div class="card-body">
+      <div class="border relative grid items-center">
+        <div class="avatar absolute justify-self-center">
+          <div class="ring-primary ring-offset-base-100 w-24 rounded-full">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 120 120"
+              fill="none"
+              role="img"
+              aria-label="E-commerce Logo"
+              width="96"
+              height="96"
+            >
+              <!-- Background Circle -->
+              <circle
+                cx="60"
+                cy="60"
+                r="58"
+                fill="#4CAF50"
+                stroke="#2E7D32"
+                stroke-width="4"
+              />
+
+              <!-- Shopping Bag -->
+              <path
+                d="M40 50 L80 50 L90 80 Q90 85 85 85 H35 Q30 85 30 80 L40 50 Z"
+                fill="#ffffff"
+                stroke="#2E7D32"
+                stroke-width="2"
+              />
+
+              <!-- Bag Handles -->
+              <path
+                d="M50 50 C50 40 70 40 70 50"
+                stroke="#2E7D32"
+                stroke-width="2"
+                fill="none"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <h2 class="card-title text-center text-xl font-bold mt-12">
+        Seja bem vindo!
+      </h2>
+      <p class="text-sm">Informe um número de contato para acessar a loja</p>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-control">
+          <app-input
+            [phone]="true"
+            formControlName="phoneNumber"
+            label="Número para contato"
+            placeholder="Informe seu número de telefone"
+          ></app-input>
+          <div
+            *ngIf="
+              loginForm.get('phoneNumber')?.invalid &&
+              loginForm.get('phoneNumber')?.touched
+            "
+            class="text-error text-sm"
+          >
+            Informe um número de telefone válido.
+          </div>
+        </div>
+        <div class="form-control mt-4">
+          <app-button
+            class="w-full"
+            [disabled]="loginForm.invalid"
+            theme="accent"
+            >Acessar Loja</app-button
+          >
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
