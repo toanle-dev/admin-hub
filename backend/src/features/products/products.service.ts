@@ -26,7 +26,7 @@ export class ProductsService {
   }
 
   async findOne(productId: number) {
-    return this.prisma.product.findUnique({
+    const data = await this.prisma.product.findUnique({
       where: {
         id: Number(productId),
       },
@@ -34,6 +34,7 @@ export class ProductsService {
         category: true,
       },
     });
+    return data;
   }
 
   async findAll() {
@@ -44,10 +45,45 @@ export class ProductsService {
     });
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
+  async update(
+    productId: number,
+    dto: UpdateProductDto,
+    file: Express.Multer.File,
+  ) {
+    const product = await this.prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
+    // Verifica se foi enviada uma nova imagem do produto
+    if (file) {
+      // Envia nova imagem no produto para o cloudinary
+      const result = await this.cloudinary.uploadImage(
+        file.path,
+        'admin-hub/products',
+      );
+
+      dto.imageUrl = 'cloudinary:' + result.public_id;
+    }
+
+    // Apaga imagem antiga do produto no cloudinary caso exista
+    if (product.imageUrl) {
+      const publicId = product.imageUrl.split(':')[1];
+      await this.cloudinary.deleteImage(publicId);
+    }
+
+    // Salva produto
     return this.prisma.product.update({
-      where: { id: Number(id) },
-      data: updateProductDto,
+      where: { id: productId },
+      data: {
+        name: dto.name,
+        description: dto.description,
+        price: dto.price,
+        stock: dto.stock,
+        imageUrl: dto.imageUrl || null,
+        updatedAt: new Date(),
+      },
     });
   }
 
@@ -64,9 +100,10 @@ export class ProductsService {
       },
     });
 
+    // TODO: Caso não possua a imagem na base de dados retornar que não possue imagem
     const imageUrl = product.imageUrl.split(':');
-    const cloudinaryPublicId = imageUrl[1];
+    const publicId = imageUrl[1];
 
-    return this.cloudinary.downloadImage(cloudinaryPublicId);
+    return this.cloudinary.downloadImage(publicId);
   }
 }

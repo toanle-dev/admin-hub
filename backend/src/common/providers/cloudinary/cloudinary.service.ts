@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
 import { CloudinaryResponse } from './cloudinary-response';
 import * as streamifier from 'streamifier';
@@ -30,6 +30,18 @@ export class CloudinaryService {
         },
       );
     });
+  }
+
+  async deleteImage(publicId: string): Promise<any> {
+    try {
+      const result = await v2.uploader.destroy(publicId);
+      return result;
+    } catch (error) {
+      throw new HttpException(
+        'Erro ao deletar imagem no Cloudinary',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   /**

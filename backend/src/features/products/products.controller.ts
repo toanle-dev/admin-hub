@@ -29,7 +29,8 @@ export class ProductsController {
 
   @Get(':id')
   async findById(@Param('id') id: number) {
-    return this.productsService.findOne(id);
+    const product = await this.productsService.findOne(id);
+    return product;
   }
 
   @Post()
@@ -42,11 +43,13 @@ export class ProductsController {
   }
 
   @Put(':id')
+  @UseInterceptors(FileInterceptor('image'))
   async update(
     @Param('id') id: number,
     @Body() updateProductDto: UpdateProductDto,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.productsService.update(id, updateProductDto);
+    return this.productsService.update(id, updateProductDto, file);
   }
 
   @Delete(':id')

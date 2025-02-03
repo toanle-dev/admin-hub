@@ -4,6 +4,7 @@ import { PrismaProvider } from 'src/common/providers/prisma/prisma.provider';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
+import { LoginEcommerceDto } from './dto/login-ecommerce.dto';
 
 @Injectable()
 export class AuthService {
@@ -38,6 +39,15 @@ export class AuthService {
 
     const payload = { sub: user.id, email: user.email, role: user.role };
     const token = this.jwtService.sign(payload);
+
+    return { access_token: token };
+  }
+
+  async loginEcommerce(dto: LoginEcommerceDto) {
+
+    // TODO: Criar validação de autenticação via mensagem para o celular
+
+    const token = this.jwtService.sign({ phone: dto.phone });
 
     return { access_token: token };
   }

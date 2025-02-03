@@ -41,7 +41,7 @@ model Product {
   description String?
   price       Float
   stock       Int       @default(0)
-  imageUrl    String?  
+  imageUrl    String?   @default("")  
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   category    Category?  @relation(fields: [categoryId], references: [id])
