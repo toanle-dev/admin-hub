@@ -10,7 +10,7 @@ import { OrderStatus } from './enum/order.enum';
 
 @Injectable()
 export class OrdersService {
-  private ordersChange = new Subject();
+  private ordersChange = new Subject<Order[]>();
 
   constructor(private prisma: PrismaProvider) {}
 
@@ -172,14 +172,23 @@ export class OrdersService {
     return this.prisma.paymentMethod.findMany();
   }
 
-  getOrdersEvent(): Observable<MessageEvent> {
+  getOrdersEventByUser(userId: number): Observable<MessageEvent<Order[]>> {
+    return this.getOrdersEvent().pipe(
+      map((event) => {
+        const data = event.data.filter((order) => order.userId == userId);
+        const messageData = { ...event, ...data };
+        return messageData;
+      }),
+    );
+  }
+
+  getOrdersEvent(): Observable<MessageEvent<Order[]>> {
     return this.ordersChange.asObservable().pipe(
-      map(
-        (orders) =>
-          ({
-            data: orders,
-          }) as MessageEvent,
-      ),
+      map((orders) => {
+        return {
+          data: orders,
+        } as MessageEvent<Order[]>;
+      }),
     );
   }
 }

@@ -1,22 +1,27 @@
 import {
-  Controller,
-  Post,
   Body,
+  Controller,
   Get,
   Param,
   Patch,
-  UseGuards,
+  Post,
+  Query,
   Req,
   Sse,
-  Query,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 
-import { CreateOrderDto } from './dto/create-order.dto';
-import { JwtAuthGuard } from 'src/modules/auth/guard/jwt-auth.guard';
+import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/modules/auth/auth.service';
+import { Public } from 'src/modules/auth/decorator/public.decorator';
+import { Roles } from 'src/modules/auth/decorator/roles.decorator';
+import { Role } from 'src/modules/auth/enum/role.enum';
+import { RolesGuard } from 'src/modules/auth/guard/roles.guard';
+import { JwtToken } from 'src/modules/auth/interfaces/jwt';
+import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderStatus } from './enum/order.enum';
 
 @Controller('orders')
@@ -24,31 +29,33 @@ export class OrdersController {
   constructor(
     private readonly authService: AuthService,
     private readonly ordersService: OrdersService,
+    private jwtService: JwtService,
   ) {}
 
-  // Criar um pedido
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN, Role.MANAGER, Role.CUSTOMER)
+  @UseGuards(RolesGuard)
   async createOrder(@Body() orderDto: CreateOrderDto, @Req() req: any) {
-    return this.ordersService.createOrder(req.user.userId, orderDto);
+    return this.ordersService.createOrder(Number(req.user.userId), orderDto);
   }
 
-  // Listar pedidos de um usuário
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN, Role.MANAGER, Role.CUSTOMER)
+  @UseGuards(RolesGuard)
   async getOrders() {
     return this.ordersService.getOrders();
   }
 
   @Get('contact/:phone')
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN, Role.MANAGER, Role.CUSTOMER)
+  @UseGuards(RolesGuard)
   async getOrdersByContact(@Param('phone') phone) {
     return this.ordersService.getOrdersByContact(phone);
   }
 
-  // Atualizar status do pedido
   @Patch(':orderId/status')
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN, Role.MANAGER)
+  @UseGuards(RolesGuard)
   async updateStatus(
     @Param('orderId') orderId: number,
     @Body() data: { statusId: OrderStatus },
@@ -57,16 +64,35 @@ export class OrdersController {
   }
 
   @Get('payments')
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN, Role.MANAGER, Role.CUSTOMER)
+  @UseGuards(RolesGuard)
   async getPayments() {
     return this.ordersService.getPayments();
   }
 
+  @Public()
   @Sse('updates')
   sse(@Query('token') token): Observable<MessageEvent> {
     const user = this.authService.verifyToken(token);
     if (!user) throw new UnauthorizedException();
 
+    const hasRole =
+      [Role.ADMIN, Role.MANAGER, Role.CUSTOMER].indexOf(user.role.id) > -1;
+    if (!hasRole) throw new UnauthorizedException();
+
     return this.ordersService.getOrdersEvent();
+  }
+
+  @Public()
+  @Sse('update-order-status')
+  sseUpdateCustomerOrder(@Query('token') token): Observable<MessageEvent> {
+    const user = this.authService.verifyToken<JwtToken>(token);
+    if (!user) throw new UnauthorizedException();
+
+    const hasRole =
+      [Role.ADMIN, Role.MANAGER, Role.CUSTOMER].indexOf(user.role.id) > -1;
+    if (!hasRole) throw new UnauthorizedException();
+
+    return this.ordersService.getOrdersEventByUser(user.userId);
   }
 }

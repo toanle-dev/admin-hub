@@ -14,56 +14,48 @@ main()
 
 async function main() {
   // Order Status
-  ['PENDING', 'CONFIRMED', 'DELIVERED', 'REFUSED'].forEach(
-    async (status, index) => {
-      await prisma.orderStatus.upsert({
-        where: {
-          id: index + 1,
-        },
-        update: {
-          name: status,
-        },
-        create: {
-          id: index + 1,
-          name: status,
-        },
-      });
-    },
-  );
+  const orderStatus = ['PENDING', 'CONFIRMED', 'DELIVERED', 'REFUSED'];
+  for (const [index, status] of orderStatus.entries()) {
+    await prisma.orderStatus.upsert({
+      where: { id: index + 1 },
+      update: { name: status },
+      create: { id: index + 1, name: status },
+    });
+  }
 
   // Payment Status
-  ['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED'].forEach(
-    async (status, index) => {
-      await prisma.paymentStatus.upsert({
-        where: {
-          id: index + 1,
-        },
-        update: {
-          name: status,
-        },
-        create: {
-          id: index + 1,
-          name: status,
-        },
-      });
-    },
-  );
+  const paymentStatus = ['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED'];
+  for (const [index, status] of paymentStatus.entries()) {
+    await prisma.paymentStatus.upsert({
+      where: { id: index + 1 },
+      update: { name: status },
+      create: { id: index + 1, name: status },
+    });
+  }
 
   // Payment Methods
-  ['DEBIT_CARD', 'CREDIT_CARD', 'PIX', 'BOLETO', 'DINHEIRO'].forEach(
-    async (status, index) => {
-      await prisma.paymentMethod.upsert({
-        where: {
-          id: index + 1,
-        },
-        update: {
-          name: status,
-        },
-        create: {
-          id: index + 1,
-          name: status,
-        },
-      });
-    },
-  );
+  const paymentMethods = [
+    'DEBIT_CARD',
+    'CREDIT_CARD',
+    'PIX',
+    'BOLETO',
+    'DINHEIRO',
+  ];
+  for (const [index, method] of paymentMethods.entries()) {
+    await prisma.paymentMethod.upsert({
+      where: { id: index + 1 },
+      update: { name: method },
+      create: { id: index + 1, name: method },
+    });
+  }
+
+  // Roles
+  const roles = ['ADMIN', 'MANAGER', 'CUSTOMER'];
+  for (const [index, role] of roles.entries()) {
+    await prisma.role.upsert({
+      where: { id: index + 1 },
+      update: { name: role },
+      create: { id: index + 1, name: role },
+    });
+  }
 }

@@ -6,9 +6,9 @@ export class RegisterDto {
   email: string;
 
   @IsNotEmpty()
-  @Length(8, 32)
-  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
-    message: 'Password must contain at least one letter and one number',
-  })
+  // @Length(8, 32)
+  // @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+  //   message: 'Password must contain at least one letter and one number',
+  // })
   password: string;
 }

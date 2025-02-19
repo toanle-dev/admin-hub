@@ -5,7 +5,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { PrismaProvider } from 'src/common/providers/prisma/prisma.provider';
 import { AuthService } from './auth.service';
-import { JwtEcommerceStrategy } from './strategy/jwt-ecommerce.strategy';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './guard/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -21,12 +22,12 @@ import { JwtEcommerceStrategy } from './strategy/jwt-ecommerce.strategy';
     PrismaProvider,
     AuthService,
     JwtStrategy,
-    JwtEcommerceStrategy,
+
     // Global
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
   exports: [AuthService, PassportModule],
 })

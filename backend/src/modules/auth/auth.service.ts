@@ -1,13 +1,18 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { RegisterDto } from './dto/register.dto';
-import { PrismaProvider } from 'src/common/providers/prisma/prisma.provider';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { PrismaProvider } from 'src/common/providers/prisma/prisma.provider';
 import { LoginDto } from './dto/login.dto';
-import { LoginEcommerceDto } from './dto/login-ecommerce.dto';
+import { RegisterDto } from './dto/register.dto';
+import { Role as RoleEnum } from './enum/role.enum';
+import { JwtPayload } from './interfaces/jwt-payload';
 
 @Injectable()
 export class AuthService {
+  // Simula um banco de códigos temporários
+  private tempUsers = new Map<string, string>();
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaProvider,
@@ -37,24 +42,74 @@ export class AuthService {
       throw new Error('Invalid credentials');
     }
 
-    const payload = { sub: user.id, email: user.email, role: user.role };
+    const payload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      phone: '',
+    };
     const token = this.jwtService.sign(payload);
 
     return { access_token: token };
   }
 
-  async loginEcommerce(dto: LoginEcommerceDto) {
-
-    // TODO: Criar validação de autenticação via mensagem para o celular
-
-    const token = this.jwtService.sign({ phone: dto.phone });
-
-    return { access_token: token };
+  async generateTemporaryCode(phone: string) {
+    // Código de 6 dígitos
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    this.tempUsers.set(phone, code);
+    return { message: 'Código enviado', code };
   }
 
-  verifyToken(token: string): any {
+  async verifyCodeAndGenerateToken(phone: string, code: string) {
+    // Valida codigo de verificação
+    if (this.tempUsers.get(phone) !== code) {
+      throw new UnauthorizedException('Código inválido');
+    }
+
+    // Localiza usuario pelo telefone
+    let user = await this.prisma.user.findFirst({
+      where: {
+        phone: phone,
+      },
+      include: {
+        role: true,
+      },
+    });
+
+    if (!user) {
+      user = await this.prisma.user.create({
+        data: {
+          email: phone.concat('@undefined'),
+          phone: phone,
+          password: '',
+          roleId: RoleEnum.CUSTOMER,
+        },
+        include: {
+          role: true,
+        },
+      });
+    }
+
+    // Gera o token
+    const access_token = this.jwtService.sign(<JwtPayload>{
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      phone: phone,
+    });
+
+    return { access_token };
+  }
+
+  async getRoles(): Promise<Role[]> {
+    return this.prisma.role.findMany();
+  }
+
+  verifyToken<T extends object = any>(token: string): T {
     try {
-      return this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
+      return this.jwtService.verify<T>(token, {
+        secret: process.env.JWT_SECRET,
+      });
     } catch (error) {
       throw new UnauthorizedException('Invalid or expired token');
     }

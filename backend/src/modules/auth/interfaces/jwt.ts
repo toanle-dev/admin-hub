@@ -1,5 +1,7 @@
-export interface TokenJWT {
-  userId: string;
+import { Role } from '@prisma/client';
+
+export interface JwtToken {
+  userId: number;
   email: string;
-  role: string;
+  role: Role;
 }
