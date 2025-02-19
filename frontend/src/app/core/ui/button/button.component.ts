@@ -1,6 +1,6 @@
-import { Component, input, output } from '@angular/core';
-import { ButtonTheme } from './button.interface';
 import { CommonModule } from '@angular/common';
+import { Component, input } from '@angular/core';
+import { ButtonSize, ButtonTheme } from './button.interface';
 
 @Component({
   selector: 'app-button',
@@ -10,9 +10,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
-  theme = input<ButtonTheme>('default');
+  theme = input<ButtonTheme>('primary');
   outline = input(false);
   circle = input(false);
   disabled = input(false);
   class = input('');
+  size = input<ButtonSize>('Normal');
 }

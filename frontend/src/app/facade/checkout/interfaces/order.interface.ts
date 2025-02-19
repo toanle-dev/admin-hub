@@ -1,5 +1,6 @@
 export interface Order {
   id: number;
+  phoneContact: string;
   totalValue: number;
   deliveryAddressId: number | null;
   createdAt: string; // ISO 8601 string

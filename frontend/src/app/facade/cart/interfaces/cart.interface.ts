@@ -9,7 +9,6 @@ export interface Order {
   payment: Partial<Payment> | null;
   change: number;
   deliveryAddress: DeliveryAddress | null;
-  phoneContact: string;
   createdAt: Date;
   updatedAt: Date;
 }

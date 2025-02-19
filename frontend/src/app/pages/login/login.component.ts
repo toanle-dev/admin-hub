@@ -24,7 +24,7 @@ export class LoginComponent {
   private readonly auth = inject(AuthService);
 
   loginForm = this.fb.group({
-    email: ['toan@outlook.com', [Validators.required, Validators.email]],
+    email: ['toan.rle@outlook.com', [Validators.required, Validators.email]],
     password: ['123', [Validators.required]],
   });
 
@@ -36,7 +36,7 @@ export class LoginComponent {
     this.auth
       .login(
         this.loginForm.value.email || '',
-        this.loginForm.value.password || ''
+        this.loginForm.value.password || '',
       )
       .subscribe({
         next: () => {

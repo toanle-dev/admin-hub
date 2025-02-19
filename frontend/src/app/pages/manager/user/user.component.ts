@@ -26,8 +26,4 @@ export class UserComponent {
   editUser(userId: number): void {
     this.router.navigate([`/user-edit/${userId}`]);
   }
-
-  deleteUser(userId: number): void {}
-
-  assignRole(userId: number, roleId: number): void {}
 }

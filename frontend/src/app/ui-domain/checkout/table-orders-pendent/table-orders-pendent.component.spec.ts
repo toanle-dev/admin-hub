@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TableOrdersComponent } from './table-orders.component';
+import { TableOrdersPendentComponent } from './table-orders-pendent.component';
 
 describe('TableOrdersComponent', () => {
-  let component: TableOrdersComponent;
-  let fixture: ComponentFixture<TableOrdersComponent>;
+  let component: TableOrdersPendentComponent;
+  let fixture: ComponentFixture<TableOrdersPendentComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TableOrdersComponent]
-    })
-    .compileComponents();
+      imports: [TableOrdersPendentComponent],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(TableOrdersComponent);
+    fixture = TestBed.createComponent(TableOrdersPendentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

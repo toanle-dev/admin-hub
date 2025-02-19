@@ -7,7 +7,12 @@
 
     <app-input formControlName="lastName" label="Sobrenome"></app-input>
     <app-input formControlName="email" label="E-mail"></app-input>
-    <app-input formControlName="role" label="Role"></app-input>
+
+    <app-select
+      formControlName="role"
+      [options]="this.roleList()"
+      label="Role"
+    ></app-select>
 
     <!-- Botões -->
     <div class="flex justify-end space-x-4">

@@ -27,10 +27,11 @@ export const appConfig: ApplicationConfig = {
         config: {
           tokenGetter: () => localStorage.getItem(StorageKeys.token),
           allowedDomains: [environment.apiUrl, 'localhost:3000'],
-
           disallowedRoutes: [
-            environment.apiUrl + 'login',
-            environment.apiUrl + 'register',
+            environment.apiUrl + 'auth/login',
+            environment.apiUrl + 'auth/register',
+            environment.apiUrl + 'auth-delivery/verify-code',
+            environment.apiUrl + 'auth-delivery/generate-code',
           ],
         },
       }),

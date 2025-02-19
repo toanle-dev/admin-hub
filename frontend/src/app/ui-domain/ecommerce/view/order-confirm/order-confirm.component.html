@@ -1,14 +1,6 @@
 <header class="text-lg font-bold p-4 shadow">Confirmar Pedido</header>
 
-<!-- Conteúdo rolável -->
 <main class="flex-1 overflow-y-auto p-4">
-  <app-input
-    [phone]="true"
-    [(ngModel)]="phoneContact"
-    (changeValue)="changeContact($event)"
-    label="Número de Telefone"
-  ></app-input>
-
   <!-- Forma de Pagamento -->
   <app-select
     label="Forma de Pagamento"
@@ -18,56 +10,57 @@
   ></app-select>
 
   @if (isCashPayment()) {
-  <section class="animate-fade animate-delay-150">
-    <app-checkbox #needChange label="Precisa de troco?"></app-checkbox>
+    <section class="animate-fade animate-delay-150">
+      <app-checkbox #needChange label="Precisa de troco?"></app-checkbox>
 
-    @if (needChange.value) {
-    <div class="animate-fade-up grid grid-cols-2 gap-4 mb-4">
-      <app-input
-        [(ngModel)]="paymentValue"
-        label="Valor do pagamento"
-        [currency]="true"
-      ></app-input>
+      @if (needChange.value) {
+        <div class="animate-fade-up grid grid-cols-2 gap-4 mb-4">
+          <app-input
+            [(ngModel)]="paymentValue"
+            label="Valor do pagamento"
+            [currency]="true"
+          ></app-input>
 
-      <label class="form-control w-full">
-        <div class="label">
-          <span class="label-text ml-auto">Troco</span>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text ml-auto">Troco</span>
+            </div>
+            <div class="h-12 items-center flex">
+              <p class="text-xl font-bold text-primary text-right w-full">
+                {{ paymentValue - totalValue() | currency: "BRL" }}
+              </p>
+            </div>
+          </label>
         </div>
-        <div class="h-12 items-center flex">
-          <p class="text-xl font-bold text-primary text-right w-full">
-            {{ paymentValue - totalValue() | currency : "BRL" }}
+      }
+
+      <div class="form-control mt-4">
+        <label class="label cursor-pointer">
+          <span class="label-text">Valor Total</span>
+          <p class="text-xl font-bold text-primary text-right">
+            {{ totalValue() | currency: "BRL" }}
           </p>
-        </div>
-      </label>
-    </div>
-    }
-
-    <div class="form-control mt-4">
-      <label class="label cursor-pointer">
-        <span class="label-text">Valor Total</span>
-        <p class="text-xl font-bold text-primary text-right">
-          {{ totalValue() | currency : "BRL" }}
-        </p>
-      </label>
-    </div>
-  </section>
+        </label>
+      </div>
+    </section>
   }
 
   <!-- Endereço de Entrega -->
   <div class="card bg-primary text-primary-content mt-4 animate-fade">
     <div class="card-body">
       @if (deliveryAddress()) {
-      <h2 class="card-title">Endereço de Entrega</h2>
-      <p>{{ deliveryAddress()?.street }}, {{ deliveryAddress()?.number }}</p>
+        <h2 class="card-title">Endereço de Entrega</h2>
+        <p>{{ deliveryAddress()?.street }}, {{ deliveryAddress()?.number }}</p>
 
-      @if (deliveryAddress()?.complement) {
-      <p class="text-sm font-semibold">Complemento</p>
+        @if (deliveryAddress()?.complement) {
+          <p class="text-sm font-semibold">Complemento</p>
 
-      <p>{{ deliveryAddress()?.complement }}</p>
-      } }
+          <p>{{ deliveryAddress()?.complement }}</p>
+        }
+      }
 
       <div class="card-actions justify-end">
-        <app-button (click)="addAddress()">
+        <app-button theme="default" (click)="addAddress()">
           {{ deliveryAddress() ? "Alterar" : "Informar Endereço" }}
         </app-button>
       </div>

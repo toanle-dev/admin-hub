@@ -86,10 +86,6 @@ export class OrderConfirmComponent {
     this.cart.setPayment(event);
   }
 
-  changeContact(event: KeyboardEvent) {
-    this.cart.setPhoneContact(this.phoneContact);
-  }
-
   backNavigation() {
     this.drawer.command.goBack();
   }

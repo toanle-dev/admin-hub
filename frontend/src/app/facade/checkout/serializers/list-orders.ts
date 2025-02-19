@@ -8,6 +8,7 @@ export const mapOrders = (res: any): Order[] => {
   return res.map((order: any) => {
     const orderData: Order = {
       id: order.id,
+      phoneContact: order.phoneContact,
       totalValue: order.items.reduce((acc: any, item: any) => {
         return acc + item.price * item.quantity;
       }, 0),

@@ -13,3 +13,10 @@ export enum PaymentMethod {
   BOLETO = 'Boleto',
   DINHEIRO = 'Dinheiro',
 }
+
+export enum PaymentStatus {
+  PENDING = 1,
+  COMPLETED,
+  FAILED,
+  REFUNDED,
+}

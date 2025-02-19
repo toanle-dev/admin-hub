@@ -1,35 +1,34 @@
-import { Component, inject, model, signal } from '@angular/core';
-import { InputComponent } from '../../../../core/ui/input/input.component';
-import { ButtonComponent } from '../../../../core/ui/button/button.component';
+import { AfterViewInit, Component, inject, signal } from '@angular/core';
 
-import { CartFacade } from '../../../../facade/cart/cart.facade';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { CartFacade } from '../../../../facade/cart/cart.facade';
 import { ViewOrder } from '../../../../facade/cart/interfaces/view-order.interface';
-import { StorageService } from '../../../../core/providers/storage/storage.service';
-import { StorageKeys } from '../../../../core/providers/storage/storage.enum';
 
 @Component({
   selector: 'app-order-list',
   standalone: true,
-  imports: [FormsModule, CommonModule, InputComponent, ButtonComponent],
+  imports: [FormsModule, CommonModule],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.scss',
 })
-export class OrderListComponent {
+export class OrderListComponent implements AfterViewInit {
   private cart = inject(CartFacade);
-  private storage = inject(StorageService);
+  private jwtService = inject(JwtHelperService);
 
   viewOrders = signal<ViewOrder[]>([]);
-  phone = model(this.storage.get(StorageKeys.phoneContact) || '');
-  showFeatureToggleContact = true;
 
-  listOrders() {
+  ngAfterViewInit(): void {
+    const token = this.jwtService.decodeToken();
     this.cart
-      .listOrders(this.phone().replaceAll(/[^0-9]/g, ''))
+      .listOrders(String(token.phone).replaceAll(/[^0-9]/g, ''))
       .subscribe((viewOrder) => {
         this.viewOrders.set(viewOrder);
-        this.showFeatureToggleContact = false;
       });
+
+    this.cart.listenOrdersChanges().subscribe((viewOrder) => {
+      this.viewOrders.set(viewOrder);
+    });
   }
 }

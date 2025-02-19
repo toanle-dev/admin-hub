@@ -19,6 +19,7 @@ export class CategoryComponent implements AfterViewInit {
   private readonly router = inject(Router);
 
   categories: Category[] = [];
+  categoriesFiltered: Category[] = [];
 
   ngAfterViewInit(): void {
     this.loadCategories();
@@ -32,11 +33,21 @@ export class CategoryComponent implements AfterViewInit {
     this.router.navigate(['category-edit', id]);
   }
 
-  onFilterCategories(event: Event) {}
+  onFilterCategories(event: any) {
+    const text = event.target.value;
+    if (!text) {
+      this.categoriesFiltered = this.categories;
+    } else {
+      this.categoriesFiltered = this.categories.filter((d) =>
+        d.name.toUpperCase().includes(String(text).toUpperCase()),
+      );
+    }
+  }
 
   private loadCategories() {
     this.productFacade.listCategories().subscribe((data) => {
       this.categories = data;
+      this.categoriesFiltered = this.categories;
     });
   }
 }

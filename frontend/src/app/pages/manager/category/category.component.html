@@ -1,50 +1,36 @@
 <div class="p-4 space-y-4">
-  <h1 class="text-2xl font-bold">Lista de Categorias</h1>
+  <h1 class="text-2xl font-bold">Categorias</h1>
   <div class="grid grid-cols-[1fr_170px] space-x-4 items-end">
     <app-input
       (changeValue)="onFilterCategories($event)"
-      label="Filtro"
+      label="Buscar por categoria"
       place
     ></app-input>
-    <app-button theme="primary" (click)="addCategory()"
-      ><svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="size-6"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 4.5v15m7.5-7.5h-15"
-        />
-      </svg>
-      Categoria</app-button
-    >
+    <app-button theme="primary" (click)="addCategory()"> Adicionar</app-button>
   </div>
-  <table class="z-10 table table-zebra w-full mt-4">
-    <thead>
-      <tr>
-        <th class="text-left">Nome</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (category of categories; track $index) {
-      <tr>
-        <td class="text-left">{{ category.name }}</td>
+  @if (categoriesFiltered.length) {
+    <table class="z-10 table table-zebra w-full mt-4">
+      <thead>
+        <tr>
+          <th class="text-left">Nome</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (category of categoriesFiltered; track $index) {
+          <tr>
+            <td class="text-left">{{ category.name }}</td>
 
-        <td class="text-center">
-          <button
-            class="btn btn-sm btn-warning"
-            (click)="editCategory(category.id)"
-          >
-            Editar
-          </button>
-        </td>
-      </tr>
-      }
-    </tbody>
-  </table>
+            <td class="text-center">
+              <button
+                class="btn btn-sm btn-warning"
+                (click)="editCategory(category.id)"
+              >
+                Editar
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 </div>

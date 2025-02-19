@@ -10,6 +10,10 @@
     '!btn-disabled': disabled(),
     '!btn-circle': circle(),
     '!btn-outline': outline(),
+
+    'btn-lg': size() == 'Large',
+    'btn-sm': size() == 'Small',
+    'btn-xs': size() == 'Tiny',
   }"
   [class]="class() + ' btn shadow'"
 >

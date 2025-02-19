@@ -45,33 +45,55 @@
       <h2 class="card-title text-center text-xl font-bold mt-12">
         Seja bem vindo!
       </h2>
-      <p class="text-sm">Informe um número de contato para acessar a loja</p>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <form [formGroup]="loginForm">
         <div class="form-control">
           <app-input
             [phone]="true"
             formControlName="phoneNumber"
-            label="Número para contato"
+            label="Telefone para contato"
             placeholder="Informe seu número de telefone"
           ></app-input>
-          <div
-            *ngIf="
-              loginForm.get('phoneNumber')?.invalid &&
-              loginForm.get('phoneNumber')?.touched
-            "
-            class="text-error text-sm"
-          >
-            Informe um número de telefone válido.
+          @if (isLoadCode()) {
+          <div class="flex m-auto my-5">
+            <span
+              class="loading loading-spinner loading-lg text-primary"
+            ></span>
           </div>
+          } @if (code()) {
+          <div class="mt-4">
+            <p class="font-semibold text-xs text-gray-700">
+              Codigo de verificação!
+            </p>
+            <p class="text-3xl text-gray-800">{{ code() }}</p>
+          </div>
+
+          <app-input
+            formControlName="verificationCode"
+            label="Informe o código de verificação"
+          ></app-input>
+
+          <app-button
+            (click)="verifyCode()"
+            theme="accent"
+            class="w-full mt-3"
+            [disabled]="loginForm.invalid"
+            >Confirmar</app-button
+          >
+          }
         </div>
+
+        @if (!code()) {
         <div class="form-control mt-4">
           <app-button
+            (click)="generateCode()"
             class="w-full"
             [disabled]="loginForm.invalid"
-            theme="accent"
-            >Acessar Loja</app-button
+            >Confirmar</app-button
           >
         </div>
+
+        }
       </form>
     </div>
   </div>

@@ -2,15 +2,18 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Product } from '../product/interfaces/product.interface';
 import { DeliveryAddress, Order } from './interfaces/cart.interface';
 
-import { v4 as uuidv4 } from 'uuid';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { map, Observable, tap } from 'rxjs';
-import { OrderService } from '../../api/orders/orders.service';
-import { Payment } from './interfaces/payment.interface';
-import { mapPayments } from './serializers/payments';
-import { StorageService } from '../../core/providers/storage/storage.service';
-import { StorageKeys } from '../../core/providers/storage/storage.enum';
+import { v4 as uuidv4 } from 'uuid';
 import { OrderStatus } from '../../api/orders/enums/order.enum';
+import { OrderService } from '../../api/orders/orders.service';
+import { StorageKeys } from '../../core/providers/storage/storage.enum';
+import { StorageService } from '../../core/providers/storage/storage.service';
+import { Payment } from './interfaces/payment.interface';
+import { ViewOrder } from './interfaces/view-order.interface';
 import { mapListOrders } from './serializers/list-orders';
+import { mapListenOrdersChanges } from './serializers/listen-orders-changes';
+import { mapPayments } from './serializers/payments';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +21,7 @@ import { mapListOrders } from './serializers/list-orders';
 export class CartFacade {
   private orderService = inject(OrderService);
   private storage = inject(StorageService);
+  private jwtService = inject(JwtHelperService);
 
   order = signal<Order>({
     uuid: uuidv4(),
@@ -26,7 +30,6 @@ export class CartFacade {
     deliveryAddress: null,
     payment: null,
     change: 0,
-    phoneContact: '',
     createdAt: new Date(),
     updatedAt: new Date(),
   });
@@ -80,13 +83,6 @@ export class CartFacade {
     this.saveStore();
   }
 
-  setPhoneContact(phone: string) {
-    this.order.update((order) => {
-      order.phoneContact = phone.replaceAll(/[^0-9]/g, '');
-      return { ...order };
-    });
-  }
-
   addAddress(address: DeliveryAddress) {
     this.order.update((order) => {
       order.deliveryAddress = address;
@@ -97,9 +93,12 @@ export class CartFacade {
   }
 
   confirmOrder() {
+    const token = this.jwtService.decodeToken();
+
     return this.orderService
       .createOrder({
-        phoneContact: this.order().phoneContact,
+        // TODO
+        phoneContact: token.phone,
         paymentId: Number(this.order().payment?.id || 0),
         paymentValue: this.order().payment?.value || 0,
         items: this.order().items.map((d) => {
@@ -122,9 +121,6 @@ export class CartFacade {
       })
       .pipe(
         tap(() => {
-          // Lembra o último telefone de contato
-          this.storage.set(StorageKeys.phoneContact, this.order().phoneContact);
-
           // Encerra pedido no checkout para proximo pedido
           this.storage.remove(StorageKeys.order);
           this.order.set({
@@ -134,20 +130,25 @@ export class CartFacade {
             deliveryAddress: this.order().deliveryAddress,
             payment: this.order().payment,
             change: 0,
-            phoneContact: this.order().phoneContact,
             createdAt: new Date(),
             updatedAt: new Date(),
           });
 
           this.saveStore();
-        })
+        }),
       );
   }
 
-  listOrders(phone: string) {
+  listOrders(phone: string): Observable<ViewOrder[]> {
     return this.orderService
       .getOrdersByContact(phone)
       .pipe(map((json) => mapListOrders(json)));
+  }
+
+  listenOrdersChanges(): Observable<ViewOrder[]> {
+    return this.orderService
+      .listOrdersByUser()
+      .pipe(map((res) => mapListenOrdersChanges(JSON.parse(res.data))));
   }
 
   private saveStore() {

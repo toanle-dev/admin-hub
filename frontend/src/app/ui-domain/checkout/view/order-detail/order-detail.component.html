@@ -1,76 +1,107 @@
-<div class="grid grid-cols-2">
-  <div>
-    <h2 class="font-bold text-xl mb-4">Detalhes do Pedido #{{ order.id }}</h2>
-    <p>{{ order.createdAt }}</p>
+<!-- Cabeçalho do Pedido -->
+<div class="border-b pb-4 mb-6">
+  <div class="relative w-full">
+    <h1 class="text-2xl font-bold text-gray-800">
+      Detalhes do Pedido #{{ order.id }}
+    </h1>
+    <app-button
+      class="absolute top-0 right-0"
+      theme="ghost"
+      size="Small"
+      [circle]="true"
+      (click)="closeModal()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18 18 6M6 6l12 12"
+        />
+      </svg>
+    </app-button>
   </div>
-  <p class="ml-auto">{{ order.status.name }}</p>
-</div>
-<div class="divider"></div>
-<!-- Informações do pedido -->
-<div class="mb-4">
-  <p>
-    <span class="font-bold">Última atualização:</span> {{ order.updatedAt }}
-  </p>
-  <p>
-    <span class="font-bold">Total:</span>
-    {{ order.totalValue | currency : "BRL" }}
-  </p>
-</div>
-<!-- Endereço de entrega -->
-<div class="mb-4">
-  <h3 class="font-semibold text-lg">Endereço de Entrega</h3>
-  <p>
-    {{ order.deliveryAddress!.street + ", " + order.deliveryAddress!.number }}
-  </p>
-  <p>Complemento: {{ order.deliveryAddress!.complement }}</p>
-  <p>CEP: {{ order.deliveryAddress!.postalCode }}</p>
+  <p class="text-sm text-gray-500">{{ order.createdAt }}</p>
+  <div class="mt-2">
+    <span
+      class="px-3 py-1 text-sm font-semibold bg-green-100 text-green-800 rounded-full"
+    >
+      {{ order.status.name }}
+    </span>
+  </div>
 </div>
 
-<!-- Itens do pedido -->
-<div class="mb-4">
-  <h3 class="font-semibold text-lg">Itens do Pedido</h3>
-  <table class="table w-full">
-    <thead>
-      <tr>
-        <th>Produto</th>
-        <th>Quantidade</th>
-        <th>Preço</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (item of order.items; track $index) {
-      <tr>
-        <td>{{ item.product.name }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>{{ item.price | currency : "BRL" }}</td>
-        <td>{{ item.quantity * item.price | currency : "BRL" }}</td>
-      </tr>
-      }
-    </tbody>
-  </table>
+<!-- Informações Gerais -->
+<div class="mb-8">
+  <p class="text-sm text-gray-600">Última atualização: {{ order.updatedAt }}</p>
 </div>
+
+<!-- Endereço de Entrega -->
+<div class="mb-8">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">Endereço de Entrega</h2>
+  <p class="text-gray-700">
+    {{ order.deliveryAddress!.street + ", " + order.deliveryAddress!.number }}
+  </p>
+  <p class="text-gray-700">
+    Complemento: {{ order.deliveryAddress!.complement }}
+  </p>
+  <p class="text-gray-700">CEP: {{ order.deliveryAddress!.postalCode }}</p>
+</div>
+
+<!-- Itens do Pedido -->
+<div class="mb-8">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">Itens do Pedido</h2>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white">
+      <thead>
+        <tr>
+          <th class="py-2 px-4 border-b text-left text-gray-600">Produto</th>
+          <th class="py-2 px-4 border-b text-center text-gray-600">
+            Quantidade
+          </th>
+          <th class="py-2 px-4 border-b text-right text-gray-600">Preço</th>
+          <th class="py-2 px-4 border-b text-right text-gray-600">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of order.items; track $index) {
+          <tr>
+            <td class="py-3 px-4 border-b text-gray-700">
+              {{ item.product.name }}
+            </td>
+            <td class="py-3 px-4 border-b text-center text-gray-700">
+              {{ item.quantity }}
+            </td>
+            <td class="py-3 px-4 border-b text-right text-gray-700">
+              {{ item.price | currency: "BRL" }}
+            </td>
+            <td class="py-3 px-4 border-b text-right text-gray-700">
+              {{ item.quantity * item.price | currency: "BRL" }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <!-- Pagamentos -->
-<div class="mb-4">
-  <h3 class="font-semibold text-lg">Pagamentos</h3>
-  <ul class="list-disc ml-5">
-    @for (payment of order.payments; track $index) {
-    <li>
-      <p><span class="font-bold">Método:</span> {{ payment.method.name }}</p>
-      <p>
-        <span class="font-bold">Valor Pago:</span>
-        {{ payment.amountPaid | currency : "BRL" }}
-      </p>
-      <p>
-        <span class="font-bold">Status:</span> {{ payment.statusPayment.name }}
-      </p>
-    </li>
-    }
-  </ul>
-</div>
-<div class="modal-action">
-  <app-button theme="error" (click)="refusedOrder()">Recusar Pedido</app-button>
-  <app-button theme="success" (click)="confirmOrder()"
-    >Aceitar Pedido</app-button
-  >
+<div>
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">Pagamento</h2>
+  <div class="space-y-2">
+    <p class="text-gray-700">
+      <span class="font-semibold">Método:</span>
+      {{ order.payments[0].method.name }}
+    </p>
+    <p class="text-gray-700">
+      <span class="font-semibold">Valor Pago:</span>
+      {{ order.payments[0].amountPaid | currency: "BRL" }}
+    </p>
+  </div>
 </div>

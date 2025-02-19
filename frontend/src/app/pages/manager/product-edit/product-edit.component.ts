@@ -39,7 +39,7 @@ import { GoBackComponent } from '../../../core/ui/go-back/go-back.component';
 export class ProductEditComponent {
   private readonly productFacade = inject(ProductFacade);
   private readonly fb = inject(FormBuilder);
-  file = viewChild.required<InputFileComponent>('file');
+  file = viewChild<InputFileComponent>('file');
 
   id = input.required<number>();
   categories = signal<SelectOption[]>([]);
@@ -65,7 +65,8 @@ export class ProductEditComponent {
         history.back();
       },
       error: (err) => {
-        console.log('Error', err);
+        alert('Erro ao atualizar produto');
+        console.log(err);
       },
     });
   }
@@ -125,7 +126,9 @@ export class ProductEditComponent {
     formData.append('stock', String(product.stock));
     formData.append('imageUrl', String(product.imageUrl));
     formData.append('categoryId', String(product.categoryId));
-    formData.append('image', this.file().selectedFile || '');
+    if (this.file()) {
+      formData.append('image', this.file()?.selectedFile || '');
+    }
 
     return formData;
   }

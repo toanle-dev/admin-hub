@@ -1,8 +1,8 @@
-import { Component, inject, output } from '@angular/core';
-import { Order } from '../../../../facade/checkout/interfaces/order.interface';
 import { CommonModule } from '@angular/common';
-import { CheckoutFacade } from '../../../../facade/checkout/checkout.facade';
+import { Component, inject } from '@angular/core';
 import { ButtonComponent } from '../../../../core/ui/button/button.component';
+import { ModalService } from '../../../../core/ui/modal/modal.service';
+import { Order } from '../../../../facade/checkout/interfaces/order.interface';
 
 @Component({
   selector: 'app-order-detail',
@@ -12,23 +12,11 @@ import { ButtonComponent } from '../../../../core/ui/button/button.component';
   styleUrl: './order-detail.component.scss',
 })
 export class OrderDetailComponent {
-  private checkout = inject(CheckoutFacade);
+  private modal = inject(ModalService);
 
   order!: Order;
-  confirm = output();
-  refused = output();
 
-  refusedOrder() {
-    this.checkout.refusedOrder(this.order.id).subscribe({
-      next: (value) => this.refused.emit(),
-      error: (err) => console.log('Error ao recusar pedido', err),
-    });
-  }
-
-  confirmOrder() {
-    this.checkout.confirmOrder(this.order.id).subscribe({
-      next: (value) => this.confirm.emit(),
-      error: (err) => console.log('Error confirmar pedido', err),
-    });
+  closeModal() {
+    this.modal.close();
   }
 }

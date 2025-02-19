@@ -1,5 +1,5 @@
 <div class="p-6">
-  <h2 class="text-2xl font-bold mb-4">Gerenciamento de Usuários</h2>
+  <h2 class="text-2xl font-bold mb-4">Usuários</h2>
 
   <!-- Tabela de Usuários -->
   <div class="overflow-x-auto">
@@ -22,30 +22,6 @@
             <button (click)="editUser(user.id)" class="btn btn-primary btn-sm">
               Editar
             </button>
-
-            <!-- Botão de Deletar -->
-            <button (click)="deleteUser(user.id)" class="btn btn-error btn-sm">
-              Deletar
-            </button>
-
-            <!-- Botão para Atribuir Role -->
-            <div class="dropdown dropdown-bottom">
-              <button
-                class="btn btn-secondary btn-sm dropdown-toggle"
-                tabindex="0"
-              >
-                Atribuir Role
-              </button>
-              <ul
-                class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                <li *ngFor="let role of roles">
-                  <a (click)="assignRole(user.id, role.id)" class="text-sm">
-                    {{ role.name }}
-                  </a>
-                </li>
-              </ul>
-            </div>
           </td>
         </tr>
       </tbody>

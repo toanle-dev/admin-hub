@@ -7,3 +7,5 @@ export type ButtonTheme =
   | 'error'
   | 'success'
   | 'ghost';
+
+export type ButtonSize = 'Large' | 'Normal' | 'Small' | 'Tiny';

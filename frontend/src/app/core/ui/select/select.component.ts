@@ -3,12 +3,8 @@ import {
   AfterViewInit,
   Component,
   forwardRef,
-  Input,
   input,
-  OnChanges,
-  OnInit,
   output,
-  SimpleChanges,
 } from '@angular/core';
 import {
   ControlValueAccessor,

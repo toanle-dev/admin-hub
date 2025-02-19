@@ -6,7 +6,6 @@ import {
   viewChild,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CheckoutFacade } from '../../../facade/checkout/checkout.facade';
 import { OrderService } from '../../../api/orders/orders.service';
 import { ModalComponent } from '../../../core/ui/modal/modal.component';
 import { ModalService } from '../../../core/ui/modal/modal.service';
@@ -27,14 +26,5 @@ export class CheckoutContainerComponent implements OnInit, AfterViewInit {
     this.modalService.create(this.modal());
   }
 
-  ngOnInit(): void {
-    this.order.listenOrders().subscribe({
-      next: (data) => {
-        console.log('Data Received', data);
-      },
-      error: (err) => {
-        console.log('SSE Error', err);
-      },
-    });
-  }
+  ngOnInit(): void {}
 }
