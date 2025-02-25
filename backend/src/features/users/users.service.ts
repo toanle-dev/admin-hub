@@ -1,9 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { PrismaProvider } from 'src/common/providers/prisma/prisma.provider';
-import { User } from '@prisma/client';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +22,7 @@ export class UsersService {
       select: {
         id: true,
         email: true,
+        phone: true,
         firstName: true,
         lastName: true,
         roleId: true,
@@ -39,6 +39,7 @@ export class UsersService {
       select: {
         id: true,
         email: true,
+        phone: true,
         firstName: true,
         lastName: true,
         roleId: true,
