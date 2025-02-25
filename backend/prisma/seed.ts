@@ -14,7 +14,13 @@ main()
 
 async function main() {
   // Order Status
-  const orderStatus = ['PENDING', 'CONFIRMED', 'DELIVERED', 'REFUSED'];
+  const orderStatus = [
+    'PENDING',
+    'CONFIRMED',
+    'DELIVERED',
+    'REFUSED',
+    'COMPLETED',
+  ];
   for (const [index, status] of orderStatus.entries()) {
     await prisma.orderStatus.upsert({
       where: { id: index + 1 },

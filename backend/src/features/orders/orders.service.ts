@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
-import { PrismaProvider } from 'src/common/providers/prisma/prisma.provider';
-import { CreateDeliveryAddressDto } from './dto/create-delivery-address.dto';
-import { Order, Product } from '@prisma/client';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { Order } from '@prisma/client';
 import { map, Observable, Subject } from 'rxjs';
-import { PaymentMethod } from './enum/payment.enum';
+import { PrismaProvider } from 'src/common/providers/prisma/prisma.provider';
+import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderStatus } from './enum/order.enum';
+import { PaymentMethod } from './enum/payment.enum';
 
 @Injectable()
 export class OrdersService {
@@ -108,7 +107,7 @@ export class OrdersService {
         phoneContact: phone,
       },
       orderBy: {
-        createdAt: 'desc',
+        updatedAt: 'desc',
       },
       include: {
         items: {

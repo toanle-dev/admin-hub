@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 
-import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { Public } from 'src/modules/auth/decorator/public.decorator';
@@ -29,7 +28,6 @@ export class OrdersController {
   constructor(
     private readonly authService: AuthService,
     private readonly ordersService: OrdersService,
-    private jwtService: JwtService,
   ) {}
 
   @Post()
@@ -46,11 +44,11 @@ export class OrdersController {
     return this.ordersService.getOrders();
   }
 
-  @Get('contact/:phone')
+  @Get('contact')
   @Roles(Role.ADMIN, Role.MANAGER, Role.CUSTOMER)
   @UseGuards(RolesGuard)
-  async getOrdersByContact(@Param('phone') phone) {
-    return this.ordersService.getOrdersByContact(phone);
+  async getOrdersByContact(@Req() req: any) {
+    return this.ordersService.getOrdersByContact(req.user.phone);
   }
 
   @Patch(':orderId/status')
