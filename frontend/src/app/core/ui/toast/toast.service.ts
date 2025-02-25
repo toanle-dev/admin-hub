@@ -13,8 +13,8 @@ export class ToastService {
     return this;
   }
 
-  add(message: string, theme: ToastTheme) {
-    this.toast.add(message, theme);
+  add(message: string, theme: ToastTheme, time?: number) {
+    this.toast.add(message, theme, time);
   }
 
   remove(id: string) {

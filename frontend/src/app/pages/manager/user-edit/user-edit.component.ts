@@ -8,9 +8,10 @@ import {
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { InputComponent } from '../../../core/ui/input/input.component';
-import { UsersService } from '../../../api/users/users.service';
 import { AuthService } from '../../../api/auth/auth.service';
+import { UsersService } from '../../../api/users/users.service';
+import { GoBackComponent } from '../../../core/ui/go-back/go-back.component';
+import { InputComponent } from '../../../core/ui/input/input.component';
 import { SelectComponent } from '../../../core/ui/select/select.component';
 import { SelectOption } from '../../../core/ui/select/select.interface';
 
@@ -23,6 +24,7 @@ import { SelectOption } from '../../../core/ui/select/select.interface';
     ReactiveFormsModule,
     InputComponent,
     SelectComponent,
+    GoBackComponent,
   ],
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.scss',

@@ -3,4 +3,5 @@ export enum OrderStatus {
   CONFIRMED,
   DELIVERED,
   REFUSED,
+  COMPLETED,
 }

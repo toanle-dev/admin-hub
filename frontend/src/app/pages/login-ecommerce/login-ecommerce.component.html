@@ -55,44 +55,44 @@
             placeholder="Informe seu número de telefone"
           ></app-input>
           @if (isLoadCode()) {
-          <div class="flex m-auto my-5">
-            <span
-              class="loading loading-spinner loading-lg text-primary"
-            ></span>
-          </div>
-          } @if (code()) {
-          <div class="mt-4">
-            <p class="font-semibold text-xs text-gray-700">
-              Codigo de verificação!
-            </p>
-            <p class="text-3xl text-gray-800">{{ code() }}</p>
-          </div>
+            <div class="flex m-auto my-5">
+              <span
+                class="loading loading-spinner loading-lg text-primary"
+              ></span>
+            </div>
+          }
+          @if (code()) {
+            <div class="mt-4">
+              <p class="font-semibold text-xs text-gray-700">
+                Codigo de verificação!
+              </p>
+              <p class="text-3xl text-gray-800">{{ code() }}</p>
+            </div>
 
-          <app-input
-            formControlName="verificationCode"
-            label="Informe o código de verificação"
-          ></app-input>
+            <app-input
+              formControlName="verificationCode"
+              label="Informe o código de verificação"
+            ></app-input>
 
-          <app-button
-            (click)="verifyCode()"
-            theme="accent"
-            class="w-full mt-3"
-            [disabled]="loginForm.invalid"
-            >Confirmar</app-button
-          >
+            <app-button
+              (click)="verifyCode()"
+              theme="secondary"
+              class="w-full mt-3"
+              [disabled]="loginForm.invalid"
+              >Confirmar</app-button
+            >
           }
         </div>
 
         @if (!code()) {
-        <div class="form-control mt-4">
-          <app-button
-            (click)="generateCode()"
-            class="w-full"
-            [disabled]="loginForm.invalid"
-            >Confirmar</app-button
-          >
-        </div>
-
+          <div class="form-control mt-4">
+            <app-button
+              (click)="generateCode()"
+              class="w-full"
+              [disabled]="loginForm.invalid"
+              >Confirmar</app-button
+            >
+          </div>
         }
       </form>
     </div>

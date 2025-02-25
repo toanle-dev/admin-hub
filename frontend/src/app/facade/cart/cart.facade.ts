@@ -139,9 +139,9 @@ export class CartFacade {
       );
   }
 
-  listOrders(phone: string): Observable<ViewOrder[]> {
+  listOrders(): Observable<ViewOrder[]> {
     return this.orderService
-      .getOrdersByContact(phone)
+      .getOrdersByContact()
       .pipe(map((json) => mapListOrders(json)));
   }
 

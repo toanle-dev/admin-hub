@@ -1,7 +1,7 @@
 <section class="menu bg-base-200 rounded-box flex flex-col w-96 h-screen p-0">
   <!-- Título fixo no topo -->
   <header class="text-lg font-bold p-4 shadow grid grid-cols-2">
-    <p>Histórico de Pedidos</p>
+    <p>Pedidos</p>
   </header>
 
   <!-- Conteúdo rolável -->
@@ -15,7 +15,7 @@
             <h2 class="card-title text-lg font-bold">
               Pedido #{{ order.id }}
               <p class="text-right">
-                <span class="badge badge-warning">{{ order.status.name }}</span>
+                <span class="badge badge-primary">{{ order.status.name }}</span>
               </p>
             </h2>
 

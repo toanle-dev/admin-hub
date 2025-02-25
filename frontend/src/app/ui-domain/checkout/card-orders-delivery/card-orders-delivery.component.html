@@ -1,9 +1,47 @@
 <div class="text-2xl font-bold mb-4">Entregas</div>
 
-@for (item of orders(); track $index) {
-  <div class="card bg-base-100 w-96 border">
-    <div class="card-body">
-      <p>We are using cookies for no reason.</p>
-    </div>
-  </div>
+@if (!orders().length) {
+  <p class="text-gray-800 text-sm font-bold text-center">
+    Não há pedidos em entrega
+  </p>
 }
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+  @for (order of orders(); track $index) {
+    <div class="card bg-base-100 border">
+      <div class="card-body">
+        <div class="flex justify-between items-center border-b pb-2 mb-2">
+          <h2 class="text-lg font-semibold">Pedido #{{ order.id }}</h2>
+          <span class="ml-auto">{{ order.updatedAt }}</span>
+        </div>
+
+        <p class="text-sm text-gray-600">
+          📞 Contato: <span class="font-medium">{{ order.phoneContact }}</span>
+        </p>
+        <p class="text-sm text-gray-600">
+          📍 Endereço:
+          <span class="font-medium"
+            >{{ order.deliveryAddress?.street }},
+            {{ order.deliveryAddress?.number }},
+            {{ order.deliveryAddress?.complement }}</span
+          >
+        </p>
+        <p class="text-sm text-gray-600">
+          💰 Total:
+          <span class="font-medium">{{ order.totalValue | currency }}</span>
+        </p>
+
+        <p class="text-sm text-gray-600 mt-2">
+          💳 Pagamento:
+          <span class="font-medium">{{ order.payments[0].method.name }}</span>
+        </p>
+
+        <div class="mt-4 flex justify-end gap-2">
+          <app-button theme="secondary" (click)="finishOrder(order.id)"
+            >Finalizar</app-button
+          >
+          <app-button (click)="viewOrderDetails(order.id)">Detalhes</app-button>
+        </div>
+      </div>
+    </div>
+  }
+</section>

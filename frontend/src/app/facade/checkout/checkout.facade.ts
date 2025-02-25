@@ -26,4 +26,8 @@ export class CheckoutFacade {
   refusedOrder(orderId: number) {
     return this.orderService.updateStatus(orderId, OrderStatus.REFUSED);
   }
+
+  finishOrder(orderId: number) {
+    return this.orderService.updateStatus(orderId, OrderStatus.COMPLETED);
+  }
 }

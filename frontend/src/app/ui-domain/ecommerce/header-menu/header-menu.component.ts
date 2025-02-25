@@ -1,17 +1,18 @@
-import { Component, computed, inject, output, viewChild } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { InputSearchComponent } from '../../../core/ui/input-search/input-search.component';
 import { CartFacade } from '../../../facade/cart/cart.facade';
 
-import { DrawerService } from '../../../core/ui/drawer/drawer.service';
-import { CartDetailComponent } from '../view/cart-detail/cart-detail.component';
 import { ButtonComponent } from '../../../core/ui/button/button.component';
-import { HeaderMenuService } from './header-menu.service';
+import { DrawerService } from '../../../core/ui/drawer/drawer.service';
+import { IconComponent } from '../../../core/ui/icon/icon.component';
+import { CartDetailComponent } from '../view/cart-detail/cart-detail.component';
 import { OrderListComponent } from '../view/order-list/order-list.component';
+import { HeaderMenuService } from './header-menu.service';
 
 @Component({
   selector: 'app-header-menu',
   standalone: true,
-  imports: [InputSearchComponent, ButtonComponent],
+  imports: [IconComponent, InputSearchComponent, ButtonComponent],
   templateUrl: './header-menu.component.html',
   styleUrl: './header-menu.component.scss',
 })
@@ -24,6 +25,10 @@ export class HeaderMenuComponent {
     return this.cart
       .order()
       .items.reduce((prev, curr) => prev + curr.quantity, 0);
+  });
+
+  hasItems = computed(() => {
+    return !!this.cart.order().items.length;
   });
 
   openCart() {

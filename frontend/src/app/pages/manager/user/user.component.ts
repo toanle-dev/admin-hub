@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsersService } from '../../../api/users/users.service';
+import { ButtonComponent } from '../../../core/ui/button/button.component';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })

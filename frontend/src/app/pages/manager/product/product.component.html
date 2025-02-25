@@ -3,12 +3,10 @@
   <div class="grid grid-cols-[1fr_170px] space-x-4 items-end">
     <app-input
       (changeValue)="onFilterProducts($event)"
-      label="Filtro"
+      label="Busca por produto"
       place
     ></app-input>
-    <app-button theme="primary" (click)="addProduct()"
-      >Adicionar Produto</app-button
-    >
+    <app-button theme="primary" (click)="addProduct()">Novo Produto</app-button>
   </div>
   <table class="z-10 table table-zebra w-full mt-4">
     <thead>
@@ -29,18 +27,12 @@
         <td class="text-right">{{ product.stock }}</td>
         <td class="text-left">{{ product.category }}</td>
         <td class="text-center">
-          <button
-            class="btn btn-sm btn-warning"
+          <app-button
+            size="Tiny"
+            theme="primary"
             (click)="editProduct(product.id)"
+            >Editar</app-button
           >
-            Editar
-          </button>
-          <!-- <button
-            class="btn btn-sm btn-error"
-            (click)="deleteProduct(product.id)"
-          >
-            Excluir
-          </button> -->
         </td>
       </tr>
     </tbody>

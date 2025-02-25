@@ -1,25 +1,38 @@
-<div class="flex items-center justify-center h-screen bg-base-content">
+<main class="flex items-center justify-center h-screen bg-base-100">
   <div
-    class="w-full max-w-sm p-8 space-y-4 rounded-lg shadow-lg bg-primary-content"
+    class="flex w-full max-w-4xl bg-white shadow-xl rounded-lg overflow-hidden"
   >
-    <h2 class="text-2xl font-bold text-center">Login</h2>
+    <div
+      class="hidden md:flex flex-col justify-center items-center w-1/2 bg-primary text-white p-10"
+    >
+      <h1 class="text-4xl font-bold">Admin-Hub</h1>
+      <p class="mt-2 text-lg text-gray-200">
+        Gerencie seus pedidos com eficiência e controle total.
+      </p>
+    </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <app-input formControlName="email" label="Email"></app-input>
-      <app-input
-        type="password"
-        formControlName="password"
-        label="Senha"
-      ></app-input>
+    <div class="w-full md:w-1/2 p-8">
+      <h2 class="text-2xl font-semibold text-primary text-center">
+        Bem-vindo de volta
+      </h2>
+      <p class="text-gray-600 text-center text-sm">
+        Acesse sua conta para continuar
+      </p>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <app-input formControlName="email" label="Email"></app-input>
+        <app-input
+          type="password"
+          formControlName="password"
+          label="Senha"
+        ></app-input>
 
-      <div class="form-control mt-4">
-        <app-button theme="primary" class="w-full">Entrar</app-button>
-      </div>
-    </form>
-
-    <!-- Link para recuperação de senha -->
-    <div class="text-center mt-4">
-      <app-button theme="link">Esqueceu a senha?</app-button>
+        <div class="flex justify-between text-sm mb-4">
+          <a href="#" class="link link-primary my-2">Esqueceu a senha?</a>
+        </div>
+        <div class="form-control mt-4">
+          <app-button theme="primary" class="w-full">Entrar</app-button>
+        </div>
+      </form>
     </div>
   </div>
-</div>
+</main>

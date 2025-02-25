@@ -53,7 +53,7 @@ export class TableOrdersPendentComponent implements AfterViewInit {
     const loadOrders = () =>
       this.checkout.listOrders().subscribe((orders) => {
         this.orders.set(
-          orders.filter((o) => o.status.id == OrderStatus.CONFIRMED),
+          orders.filter((o) => o.status.id == OrderStatus.PENDING),
         );
       });
 

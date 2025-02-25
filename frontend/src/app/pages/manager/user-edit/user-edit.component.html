@@ -1,25 +1,30 @@
-<div class="p-6 max-w-4xl mx-auto">
-  <h2 class="text-2xl font-bold mb-4">Editar Usuário</h2>
+<div class="p-4 bg-base-100 shadow rounded-lg space-y-4 animate-fade-up">
+  <section class="flex">
+    <h2 class="text-2xl font-bold">Editar Usuário</h2>
+    <app-go-back class="ml-auto"></app-go-back>
+  </section>
 
-  <!-- Formulário -->
-  <form [formGroup]="userForm" (ngSubmit)="saveUser()" class="space-y-6">
-    <app-input formControlName="firstName" label="Nome"></app-input>
+  <div class="p-6 max-w-4xl mx-auto">
+    <!-- Formulário -->
+    <form [formGroup]="userForm" (ngSubmit)="saveUser()" class="space-y-6">
+      <app-input formControlName="firstName" label="Nome"></app-input>
 
-    <app-input formControlName="lastName" label="Sobrenome"></app-input>
-    <app-input formControlName="email" label="E-mail"></app-input>
+      <app-input formControlName="lastName" label="Sobrenome"></app-input>
+      <app-input formControlName="email" label="E-mail"></app-input>
 
-    <app-select
-      formControlName="role"
-      [options]="this.roleList()"
-      label="Role"
-    ></app-select>
+      <app-select
+        formControlName="role"
+        [options]="this.roleList()"
+        label="Role"
+      ></app-select>
 
-    <!-- Botões -->
-    <div class="flex justify-end space-x-4">
-      <button type="button" (click)="cancel()" class="btn btn-secondary">
-        Cancelar
-      </button>
-      <button type="submit" class="btn btn-primary">Salvar</button>
-    </div>
-  </form>
+      <!-- Botões -->
+      <div class="flex justify-end space-x-4">
+        <button type="button" (click)="cancel()" class="btn btn-secondary">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
 </div>

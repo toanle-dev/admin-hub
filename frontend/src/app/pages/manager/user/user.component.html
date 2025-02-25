@@ -18,10 +18,9 @@
           <td>{{ user.email }}</td>
           <td>{{ user.role.name }}</td>
           <td class="flex space-x-2">
-            <!-- Botão de Editar -->
-            <button (click)="editUser(user.id)" class="btn btn-primary btn-sm">
-              Editar
-            </button>
+            <app-button size="Tiny" theme="primary" (click)="editUser(user.id)"
+              >Editar</app-button
+            >
           </td>
         </tr>
       </tbody>

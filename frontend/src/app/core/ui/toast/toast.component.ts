@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, signal } from '@angular/core';
-import { ToastTheme } from './toast.interface';
+import { Component, signal } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
+import { ToastTheme } from './toast.interface';
 
 @Component({
   selector: 'app-toast',
@@ -14,14 +14,14 @@ export class ToastComponent {
   theme = signal<ToastTheme>('info');
   messages: { id: string; text: string }[] = [];
 
-  add(text: string, theme = 'info' as ToastTheme) {
+  add(text: string, theme = 'info' as ToastTheme, time: number = 3000) {
     this.theme.set(theme);
     const id = uuidv4();
     this.messages.push({
       id,
       text,
     });
-    setTimeout(() => this.remove(id), 3000);
+    setTimeout(() => this.remove(id), time);
   }
 
   remove(id: string) {

@@ -1,40 +1,55 @@
-<div class="drawer z-50">
+<div class="z-50 drawer">
   <input #input [id]="id" type="checkbox" class="drawer-toggle" />
   <div class="drawer-side">
     <label [for]="id" aria-label="close sidebar" class="drawer-overlay"></label>
-    <ul class="menu bg-base-200 rounded-box min-h-full w-80 p-4">
-      <li>
-        <details open>
-          <summary>Administrativo</summary>
+
+    <section class="grid w-72 min-h-full">
+      <div class="menu bg-base-200 shadow-inner">
+        <div class="flex">
+          <img class="size-12" src="./assets/logo.svg" />
+          <h1 class="text-xl self-center font-bold">AdminHub</h1>
+        </div>
+        <nav class="p-4">
           <ul>
             <li>
-              <a (click)="gotToRoute('/user-management')">Usuarios</a>
+              <a (click)="gotToRoute('/home')">
+                <app-icon icon="shopping-bag"></app-icon>
+                Loja</a
+              >
+            </li>
+
+            <li>
+              <a (click)="gotToRoute('/checkout')">
+                <app-icon icon="banknotes"></app-icon>
+                Caixa</a
+              >
+            </li>
+
+            <li class="mt-3 mb-2 px-4">Cadastros</li>
+            <li>
+              <a (click)="gotToRoute('/user-management')">
+                <app-icon icon="user-group"></app-icon>
+                Usuarios</a
+              >
             </li>
             <li>
-              <a (click)="gotToRoute('/product-management')">Produtos</a>
+              <a (click)="gotToRoute('/product-management')">
+                <app-icon icon="inbox-stack"></app-icon>Produtos</a
+              >
             </li>
             <li>
-              <a (click)="gotToRoute('/category-management')">Categorias</a>
+              <a (click)="gotToRoute('/category-management')"
+                ><app-icon icon="tag"></app-icon>Categorias</a
+              >
+            </li>
+
+            <li class="my-5"></li>
+            <li>
+              <a (click)="logout()"><app-icon icon="user"></app-icon>Sair</a>
             </li>
           </ul>
-        </details>
-      </li>
-      <li>
-        <details open>
-          <summary>E-Commerce</summary>
-          <ul>
-            <li><a (click)="gotToRoute('/home')">Home</a></li>
-          </ul>
-        </details>
-      </li>
-      <li>
-        <details open>
-          <summary>Checkout</summary>
-          <ul>
-            <li><a (click)="gotToRoute('/checkout')">Home</a></li>
-          </ul>
-        </details>
-      </li>
-    </ul>
+        </nav>
+      </div>
+    </section>
   </div>
 </div>

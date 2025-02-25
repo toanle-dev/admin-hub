@@ -6,13 +6,16 @@
       label="Buscar por categoria"
       place
     ></app-input>
-    <app-button theme="primary" (click)="addCategory()"> Adicionar</app-button>
+    <app-button theme="primary" (click)="addCategory()"
+      >Nova Categoria</app-button
+    >
   </div>
   @if (categoriesFiltered.length) {
     <table class="z-10 table table-zebra w-full mt-4">
       <thead>
         <tr>
           <th class="text-left">Nome</th>
+          <th class="text-left">Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -20,13 +23,13 @@
           <tr>
             <td class="text-left">{{ category.name }}</td>
 
-            <td class="text-center">
-              <button
-                class="btn btn-sm btn-warning"
+            <td class="">
+              <app-button
+                size="Tiny"
+                theme="primary"
                 (click)="editCategory(category.id)"
+                >Editar</app-button
               >
-                Editar
-              </button>
             </td>
           </tr>
         }

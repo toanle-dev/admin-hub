@@ -24,8 +24,8 @@ export class OrderService extends ApiBase {
     return this.fetch('');
   }
 
-  getOrdersByContact(phone: string): Observable<any[]> {
-    return this.fetch('contact/' + phone);
+  getOrdersByContact(): Observable<any[]> {
+    return this.fetch('contact');
   }
 
   createOrder(order: CreateOrder): Observable<any> {
