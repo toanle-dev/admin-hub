@@ -1,7 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { OrderStatus } from '../../../api/orders/enums/order.enum';
 
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { OrderService } from '../../../api/orders/orders.service';
 import { ButtonComponent } from '../../../core/ui/button/button.component';
 import { ModalService } from '../../../core/ui/modal/modal.service';
@@ -16,15 +17,20 @@ import { OrderDetailComponent } from '../view/order-detail/order-detail.componen
   templateUrl: './table-orders-confirmed.component.html',
   styleUrl: './table-orders-confirmed.component.scss',
 })
-export class TableOrdersConfirmedComponent {
+export class TableOrdersConfirmedComponent implements OnDestroy {
   private checkout = inject(CheckoutFacade);
   private modal = inject(ModalService);
   private orderService = inject(OrderService);
 
   orders = signal<Order[]>([]);
+  subscriptions = new Subscription();
 
   ngAfterViewInit(): void {
     this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   viewOrderDetails(orderId: number) {
@@ -43,13 +49,17 @@ export class TableOrdersConfirmedComponent {
 
   private loadData() {
     const loadOrders = () =>
-      this.checkout.listOrders().subscribe((orders) => {
-        this.orders.set(
-          orders.filter((o) => o.status.id == OrderStatus.CONFIRMED),
-        );
-      });
+      this.subscriptions.add(
+        this.checkout.listOrders().subscribe((orders) => {
+          this.orders.set(
+            orders.filter((o) => o.status.id == OrderStatus.CONFIRMED),
+          );
+        }),
+      );
 
     loadOrders();
-    this.orderService.listenOrders().subscribe(() => loadOrders());
+    this.subscriptions.add(
+      this.orderService.listenOrders().subscribe(() => loadOrders()),
+    );
   }
 }

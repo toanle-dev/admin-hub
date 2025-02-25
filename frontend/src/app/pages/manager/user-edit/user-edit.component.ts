@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 
 import { AuthService } from '../../../api/auth/auth.service';
 import { UsersService } from '../../../api/users/users.service';
+import { ButtonComponent } from '../../../core/ui/button/button.component';
 import { GoBackComponent } from '../../../core/ui/go-back/go-back.component';
 import { InputComponent } from '../../../core/ui/input/input.component';
 import { SelectComponent } from '../../../core/ui/select/select.component';
@@ -25,6 +26,7 @@ import { SelectOption } from '../../../core/ui/select/select.interface';
     InputComponent,
     SelectComponent,
     GoBackComponent,
+    ButtonComponent,
   ],
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.scss',
@@ -40,6 +42,7 @@ export class UserEditComponent implements OnDestroy {
   userForm = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
+    phone: [''],
     email: ['', Validators.required],
     role: ['', Validators.required],
   });
@@ -75,6 +78,7 @@ export class UserEditComponent implements OnDestroy {
             this.userForm.reset({
               firstName: user.firstName,
               lastName: user.lastName,
+              phone: user.phone,
               email: user.email,
               role: user.role.id,
             });
@@ -82,10 +86,6 @@ export class UserEditComponent implements OnDestroy {
         );
       }),
     );
-  }
-
-  cancel() {
-    history.back();
   }
 
   saveUser(): void {

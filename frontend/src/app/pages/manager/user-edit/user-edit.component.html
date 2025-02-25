@@ -10,6 +10,7 @@
       <app-input formControlName="firstName" label="Nome"></app-input>
 
       <app-input formControlName="lastName" label="Sobrenome"></app-input>
+      <app-input formControlName="phone" label="Telefone"></app-input>
       <app-input formControlName="email" label="E-mail"></app-input>
 
       <app-select
@@ -20,10 +21,7 @@
 
       <!-- Botões -->
       <div class="flex justify-end space-x-4">
-        <button type="button" (click)="cancel()" class="btn btn-secondary">
-          Cancelar
-        </button>
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <app-button type="submit" theme="primary">Salvar</app-button>
       </div>
     </form>
   </div>

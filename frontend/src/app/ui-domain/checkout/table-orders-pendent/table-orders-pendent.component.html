@@ -18,7 +18,7 @@
         <!-- Example Row -->
         @for (order of orders(); track $index) {
           <tr>
-            <td>{{ order.phoneContact }}</td>
+            <td>{{ order.phoneContact | mask: "(00) 00000-0000" }}</td>
             <td>{{ order.totalValue | currency: "BRL" }}</td>
             <td class="flex gap-3">
               <app-button

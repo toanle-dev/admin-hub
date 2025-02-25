@@ -1,18 +1,17 @@
 import { inject, Injectable } from '@angular/core';
-import { ProductsService } from '../../api/products/products.service';
 import { CategoriesService } from '../../api/categories/categories.service';
+import { ProductsService } from '../../api/products/products.service';
 
-import { mapProducts } from './serializers/list-products';
 import { map, Observable } from 'rxjs';
-import { GroupedProducts, Product } from './interfaces/product.interface';
-import { mapCategories } from './serializers/list-categories';
-import { Category } from './interfaces/category.interface';
-import { mapProductById } from './serializers/list-by-id';
 import { CreateCategory } from '../../api/categories/interfaces/create-category.interface';
 import { UpdateCategory } from '../../api/categories/interfaces/update-category.interface';
+import { Category } from './interfaces/category.interface';
+import { GroupedProducts, Product } from './interfaces/product.interface';
 import { mapCategoryById } from './serializers/find-category';
-import { UpdateProduct } from '../../api/products/interfaces/update-product.interface';
+import { mapProductById } from './serializers/list-by-id';
+import { mapCategories } from './serializers/list-categories';
 import { mapGroupedProducts } from './serializers/list-grouped-products';
+import { mapProducts } from './serializers/list-products';
 
 @Injectable({
   providedIn: 'root',
@@ -25,10 +24,35 @@ export class ProductFacade {
     return this.products.listProducts().pipe(map((res) => mapProducts(res)));
   }
 
-  listGroupedProducts(): Observable<GroupedProducts> {
-    return this.products
-      .listProducts()
-      .pipe(map((res) => mapGroupedProducts(res)));
+  listGroupedProducts(order: string[] = []): Observable<GroupedProducts> {
+    return this.products.listProducts().pipe(
+      map((res) => {
+        const result = mapGroupedProducts(res);
+
+        if (!order.length) {
+          return result;
+        }
+
+        // Ordena objeto pela categoria
+        const sortedObj: GroupedProducts = {};
+
+        // Adiciona as propriedades que estão na ordem especificada
+        order.forEach((key) => {
+          if (result.hasOwnProperty(key)) {
+            sortedObj[key] = result[key];
+          }
+        });
+
+        // Adiciona as propriedades que não estavam na ordem especificada (mantendo a ordem original)
+        Object.keys(result).forEach((key) => {
+          if (!sortedObj.hasOwnProperty(key)) {
+            sortedObj[key] = result[key];
+          }
+        });
+
+        return sortedObj;
+      }),
+    );
   }
 
   findProduct(productId: number): Observable<Product> {

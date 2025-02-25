@@ -15,7 +15,10 @@
         </div>
 
         <p class="text-sm text-gray-600">
-          📞 Contato: <span class="font-medium">{{ order.phoneContact }}</span>
+          📞 Contato:
+          <span class="font-medium">{{
+            order.phoneContact | mask: "(00) 00000-0000"
+          }}</span>
         </p>
         <p class="text-sm text-gray-600">
           📍 Endereço:

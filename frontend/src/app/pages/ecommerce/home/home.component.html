@@ -2,16 +2,17 @@
   <main class="flex-grow container mx-auto p-4">
     <section class="">
       @for (category of categories(); track $index) {
-
-      <h2 class="text-lg text-neutral-600 font-bold my-3">
-        {{ category }}
-      </h2>
-
-      <div class="flex flex-wrap gap-4 mb-8">
-        @for (product of listByCategory(category); track $index) {
-        <app-menu-product [product]="product"></app-menu-product>
+        @if (listByCategory(category).length) {
+          <h2 class="text-lg text-neutral-600 font-bold my-3">
+            {{ category }}
+          </h2>
         }
-      </div>
+
+        <div class="flex flex-wrap gap-4 mb-8">
+          @for (product of listByCategory(category); track $index) {
+            <app-menu-product [product]="product"></app-menu-product>
+          }
+        </div>
       }
     </section>
   </main>

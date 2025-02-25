@@ -1,26 +1,22 @@
-import { Component, computed, inject, model, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
 import {
   FormBuilder,
   FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { StorageKeys } from '../../../../core/providers/storage/storage.enum';
+import { StorageService } from '../../../../core/providers/storage/storage.service';
 import { ButtonComponent } from '../../../../core/ui/button/button.component';
+import { CheckboxComponent } from '../../../../core/ui/checkbox/checkbox.component';
+import { DrawerService } from '../../../../core/ui/drawer/drawer.service';
 import { InputComponent } from '../../../../core/ui/input/input.component';
 import { SelectComponent } from '../../../../core/ui/select/select.component';
 import { SelectOption } from '../../../../core/ui/select/select.interface';
 import { CartFacade } from '../../../../facade/cart/cart.facade';
-import { DrawerService } from '../../../../core/ui/drawer/drawer.service';
+import { PaymentMethodIndex } from '../../../../facade/cart/enums/payment.enum';
 import { AddressRegisterComponent } from '../address-register/address-register.component';
-import { CheckboxComponent } from '../../../../core/ui/checkbox/checkbox.component';
-import {
-  PaymentMethod,
-  PaymentMethodIndex,
-} from '../../../../facade/cart/enums/payment.enum';
-import { CommonModule } from '@angular/common';
-import { ToastService } from '../../../../core/ui/toast/toast.service';
-import { StorageService } from '../../../../core/providers/storage/storage.service';
-import { StorageKeys } from '../../../../core/providers/storage/storage.enum';
 
 @Component({
   selector: 'app-order-confirm',
@@ -41,7 +37,7 @@ export class OrderConfirmComponent {
   private cart = inject(CartFacade);
   private fb = inject(FormBuilder);
   private drawer = inject(DrawerService);
-  private toast = inject(ToastService);
+
   private storage = inject(StorageService);
 
   deliveryAddressForm = this.fb.group({
@@ -93,7 +89,6 @@ export class OrderConfirmComponent {
   confirmOrder() {
     this.cart.confirmOrder().subscribe({
       next: () => {
-        this.toast.add('Pedido enviado', 'success');
         this.drawer.command.toggle();
       },
       error: (err) => {

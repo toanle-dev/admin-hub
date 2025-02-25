@@ -39,13 +39,15 @@ export class HomeComponent implements AfterViewInit {
 
   private loadData() {
     // Load products
-    this.products.listGroupedProducts().subscribe((data) => {
-      this.listProducts = data;
+    this.products
+      .listGroupedProducts(['Almoço', 'Lanches', 'Bebidas', 'Doces'])
+      .subscribe((data) => {
+        this.listProducts = data;
 
-      this.categories.set(Object.keys(data));
+        this.categories.set(Object.keys(data));
 
-      this.filteredListProducts.set(data);
-    });
+        this.filteredListProducts.set(data);
+      });
 
     // Apply filter
     this.headerMenuService.inputFilter.subscribe((value: string) => {
