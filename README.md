@@ -38,10 +38,4 @@ npm install
 npm start
 ```
 
-## Contribuição
-Sinta-se à vontade para contribuir com melhorias, correções ou novas funcionalidades! Abra uma issue ou envie um pull request.
-
----
-
-Feito com ♥ por [Toan Le](https://github.com/toanle-dev).
 
